@@ -15,9 +15,9 @@ function Demo() {
         event={{
           description: 'This is a smple event provided as an example only',
           duration: '2:00',
-          endTime: '20160916T214500-04:00',
+          endDatetime: '20180604T192913+00:00',
           location: 'NYC',
-          startTime: '20160916T201500-04:00',
+          startDatetime: '20180604T172932+00:00',
           title: 'Sample Event',
         }}
       />

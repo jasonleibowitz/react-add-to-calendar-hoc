@@ -1,89 +1,129 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import mergeStyles from '@jasonleibowitz/merge-styles';
 
-const formatDate = date => date.replace('+00:00', 'Z');
+const formatDate = date => date && date.replace('+00:00', 'Z');
+
+const SHARE_SITES = {
+  GOOGLE: 'Google',
+  ICAL: 'iCal',
+  OUTLOOK_WEB: 'Outlook Web',
+  YAHOO: 'Yahoo',
+};
+
+const googleShareUrl = ({
+  description,
+  endDatetime,
+  location,
+  startDatetime,
+  title,
+}) =>
+  `https://calendar.google.com/calendar/render?action=TEMPLATE&dates=${
+    startDatetime
+  }/${endDatetime}&location=${location}&text=${title}&details=${description}`;
+
+const yahooShareUrl = ({
+  description,
+  duration,
+  location,
+  startDatetime,
+  title,
+}) =>
+  `https://calendar.yahoo.com/v=60&view=d&type=20&title=${title}&st=${
+    startDatetime
+  }&dur=${duration}&desc=${description}&in_loc=${location}`;
+
+const outlookWebUrl = ({
+  description,
+  endDatetime,
+  location,
+  startDatetime,
+  title,
+}) =>
+  `https://outlook.live.com/owa/?rru=addevent&startdt=${startDatetime}&enddt=${
+    endDatetime
+  }&subject=${title}&location=${location}&body=${
+    description
+  }&allday=false&uid=123&path=/calendar/view/Month`;
+
+const buildShareFile = ({
+  description,
+  endDatetime,
+  location,
+  startDatetime,
+  title,
+}) =>
+  [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'BEGIN:VEVENT',
+    `URL:${document.URL}`,
+    `DTSTART:${startDatetime}`,
+    `DTEND:${endDatetime}`,
+    `SUMMARY:${title}`,
+    `DESCRIPTION:${description}`,
+    `LOCATION:${location}`,
+    'END:VEVENT',
+    'END:VCALENDAR',
+  ].join('\n');
+
+const buildShareUrl = (
+  { description, duration, endDatetime, location, startDatetime, title },
+  type,
+) => {
+  const encodeURI = type !== SHARE_SITES.ICAL;
+
+  const data = {
+    description: encodeURI ? encodeURIComponent(description) : description,
+    duration,
+    endDatetime: formatDate(endDatetime),
+    location: encodeURI ? encodeURIComponent(location) : location,
+    startDatetime: formatDate(startDatetime),
+    title: encodeURI ? encodeURIComponent(title) : title,
+  };
+
+  switch (type) {
+    case SHARE_SITES.GOOGLE:
+      return googleShareUrl(data);
+    case SHARE_SITES.YAHOO:
+      return yahooShareUrl(data);
+    case SHARE_SITES.OUTLOOK_WEB:
+      return outlookWebUrl(data);
+    default:
+      return buildShareFile(data);
+  }
+};
 
 export default function AddToCalendar(WrappedButton, WrappedDropdown) {
   return class AddToCalendarWrapped extends Component {
     static propTypes = {
+      buttonProps: PropTypes.shape(),
       buttonText: PropTypes.string,
+      className: PropTypes.string,
+      dropdownProps: PropTypes.shape(),
       event: PropTypes.shape({
         description: PropTypes.string,
-        endTime: PropTypes.string,
+        endDatetime: PropTypes.string,
         location: PropTypes.string,
-        startTime: PropTypes.string,
+        startDatetime: PropTypes.string,
         title: PropTypes.string,
       }).isRequired,
       isModal: PropTypes.bool,
-      items: PropTypes.array,
-      theme: PropTypes.shape({
-        component: PropTypes.string,
-        container: PropTypes.string,
-        link: PropTypes.string,
-      }),
+      items: PropTypes.oneOf(Object.values(SHARE_SITES)),
+      linkProps: PropTypes.shape(),
     };
 
     static defaultProps = {
+      buttonProps: {},
       buttonText: 'Add to Calendar',
+      className: null,
+      dropdownProps: {},
       isModal: true,
-      items: ['Google', 'Outlook', 'iCal', 'Yahoo'],
+      items: Object.values(SHARE_SITES),
+      linkProps: {},
     };
 
     state = {
       dropdownOpen: false,
-    };
-
-    buildUrl = (event, itemName) => {
-      let calendarUrl;
-
-      switch (itemName) {
-        case 'Google':
-          calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&dates=${
-            event.startDate
-          }/${event.endDate}&location=${encodeURIComponent(
-            event.location,
-          )}&text=${encodeURIComponent(
-            event.title,
-          )}&details=${encodeURIComponent(event.description)}`;
-          break;
-        case 'Yahoo':
-          calendarUrl = `https://calendar.yahoo.com/v=60&view=d&type=20&title=${encodeURIComponent(
-            event.title,
-          )}&st=${
-            event.startTime
-          }&dur=2:00&desc=${encodeURIComponent(
-            event.description,
-          )}&in_loc=${encodeURIComponent(event.location)}`;
-          break;
-        case 'OutlookWeb':
-          calendarUrl = `https://outlook.live.com/owa/?rru=addevent&startdt=${
-            event.startTime
-          }&enddt=${event.endTime}&subject=${encodeURIComponent(
-            event.title,
-          )}&location=${encodeURIComponent(
-            event.location,
-          )}&body=${encodeURIComponent(
-            event.description,
-          )}&allday=false&uid=123&path=/calendar/view/Month`;
-          break;
-        default:
-          calendarUrl = [
-            'BEGIN:VCALENDAR',
-            'VERSION:2.0',
-            'BEGIN:VEVENT',
-            `URL:${document.URL}`,
-            `DTSTART:${event.startTime}`,
-            `DTEND:${event.endTime}`,
-            `SUMMARY:${event.title}`,
-            `DESCRIPTION:${event.description}`,
-            `LOCATION:${event.location}`,
-            'END:VEVENT',
-            'END:VCALENDAR',
-          ].join('\n');
-      }
-
-      return calendarUrl;
     };
 
     handleCalendarButtonClick = e => {
@@ -110,20 +150,10 @@ export default function AddToCalendar(WrappedButton, WrappedDropdown) {
     };
 
     render() {
-      const mergedStyles = mergeStyles(
-        {
-          component: null,
-          container: null,
-          link: null,
-        },
-        this.props.theme,
-      );
-
       return (
-        <div className={mergedStyles.container}>
+        <div className={this.props.className}>
           <WrappedButton
-            {...this.props}
-            className={mergedStyles.component}
+            {...this.props.buttonProps}
             onClick={this.handleDropdownToggle}
           >
             {this.props.buttonText}
@@ -131,18 +161,17 @@ export default function AddToCalendar(WrappedButton, WrappedDropdown) {
           {!this.props.isModal ||
             (this.state.dropdownOpen && (
               <WrappedDropdown
+                {...this.props.dropdownProps}
                 isOpen={this.state.dropdownOpen}
                 onRequestClose={this.handleDropdownToggle}
                 shouldCloseOnOverlayClick={true}
               >
                 {this.props.items.map(item => (
                   <a
+                    {...this.props.linkProps}
                     key={item}
-                    className={mergedStyles.link}
                     onClick={this.handleCalendarButtonClick}
-                    href={this.buildUrl(this.props.event, item)}
-                    rel="noopener noreferrer"
-                    target="_blank"
+                    href={buildShareUrl(this.props.event, item)}
                   >
                     {item}
                   </a>
