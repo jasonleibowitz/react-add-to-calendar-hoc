@@ -7,6 +7,7 @@ const dropdownStyles = css`
   border-top: none;
   width: 300px;
   background-color: #FFF;
+  margin: 0 auto;
 `;
 
 export default function Dropdown({ children }) {
