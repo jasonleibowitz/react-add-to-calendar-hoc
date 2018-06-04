@@ -1,6 +1,6 @@
 import React from "react";
 import { render } from "react-dom";
-import AddToCalendarHOC from "../../lib";
+import AddToCalendarHOC, { SHARE_SITES } from "../../lib";
 import Button from './Button';
 import Dropdown from './Dropdown';
 import CalendarModal from './Modal';
@@ -119,6 +119,30 @@ function Demo() {
       className: linkStyles,
     }}
     event={event}
+  />
+      `}
+      </CodeSnippet>
+
+      <h2 className={subTitleSTyles}>Customized Item List Example</h2>
+      <AddToCalendarModal
+        className={componentStyles}
+        linkProps={{
+          className: linkStyles,
+        }}
+        event={event}
+        items={[SHARE_SITES.GOOGLE, SHARE_SITES.ICAL]}
+      />
+      <CodeSnippet>
+      {`
+  const AddToCalendarModal = AddToCalendarHOC(Button, CalendarModal);
+  ...
+  <AddToCalendarModal
+    className={componentStyles}
+    linkProps={{
+      className: linkStyles,
+    }}
+    event={event}
+    items={[SHARE_SITES.GOOGLE, SHARE_SITES.ICAL]}
   />
       `}
       </CodeSnippet>

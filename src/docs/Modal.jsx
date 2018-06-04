@@ -29,14 +29,13 @@ export default function CalendarModal({
   children,
   isOpen,
   onRequestClose,
-  shouldCloseOnOverlayClick,
 }) {
   return (
     <Modal
       className={containerStyles}
       isOpen={isOpen}
       onRequestClose={onRequestClose}
-      shouldCloseOnOverlayClick={shouldCloseOnOverlayClick}
+      shouldCloseOnOverlayClick={true}
     >
       <h2>Add to Calendar</h2>
       <div>{children}</div>
