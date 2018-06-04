@@ -69,7 +69,7 @@ function Demo() {
   return (
     <div className={pageStyles}>
       <h1 className={titleStyles}>
-        Demo with examples of the component
+        Examples of React Add to Calendar HOC
       </h1>
       <div>
         <h2 className={subTitleSTyles}>Event passed into examples</h2>
