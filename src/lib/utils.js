@@ -112,9 +112,9 @@ export const buildShareUrl = (
   const data = {
     description: encodeURI ? encodeURIComponent(description) : description,
     duration,
-    endDatetime: formatDate(endDatetime),
+    endDatetime: encodeURI ? formatDate(endDatetime) : endDatetime,
     location: encodeURI ? encodeURIComponent(location) : location,
-    startDatetime: formatDate(startDatetime),
+    startDatetime: encodeURI ? formatDate(startDatetime) : startDatetime,
     title: encodeURI ? encodeURIComponent(title) : title,
   };
 
