@@ -1,5 +1,22 @@
 import { SHARE_SITES } from './enums';
 
+
+/**
+ * Converts Date String with UTC timezone to date consumable by calendar
+ * apps. Changes +00:00 to Z.
+ * @param {string} Date in YYYYMMDDTHHmmssZ format
+ * @returns {string} Date with +00:00 replaceed with Z
+ */
+export const formatDate = date => date && date.replace('+00:00', 'Z');
+
+
+/**
+ * Tests provided UserAgent against Known Mobile User Agents
+ * @param {string} userAgent
+ * @returns {bool} isMobileDevice
+ */
+export const isMobile = () => /Mobile|iP(hone|od|ad)|Android|BlackBerry|IEMobile/.test(window.navigator.userAgent || window.navigator.vendor || window.opera);
+
 /**
  * Takes an event object and returns a Google Calendar Event URL
  * @param {string} event.description
@@ -77,8 +94,8 @@ const buildShareFile = ({
   location,
   startDatetime,
   title,
-}) =>
-  [
+}) => {
+  let content = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
     'BEGIN:VEVENT',
@@ -91,6 +108,9 @@ const buildShareFile = ({
     'END:VEVENT',
     'END:VCALENDAR',
   ].join('\n');
+
+  return isMobile() ? `data:text/calendar;charset=utf8${content}` : content;
+}
 
 /**
  * Takes an event object and a type of URL and returns either a calendar event
@@ -129,11 +149,3 @@ export const buildShareUrl = (
       return buildShareFile(data);
   }
 };
-
-/**
- * Converts Date String with UTC timezone to date consumable by calendar
- * apps. Changes +00:00 to Z.
- * @param {string} Date in YYYYMMDDTHHmmssZ format
- * @returns {string} Date with +00:00 replaceed with Z
- */
-export const formatDate = date => date && date.replace('+00:00', 'Z');

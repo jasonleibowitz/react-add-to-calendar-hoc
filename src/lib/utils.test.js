@@ -36,5 +36,14 @@ describe('buildShareUrl', () => {
   it('returns a proper iCal content object', () => {
     const result = buildShareUrl(testEvent, SHARE_SITES.ICAL);
     expect(result).toEqual('BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nURL:about:blank\nDTSTART:20150126T000000+00:00\nDTEND:20150126T020000+00:00\nSUMMARY:Super Fun Event\nDESCRIPTION:Description of event. Going to have a lot of fun doing things that we scheduled ahead of time.\nLOCATION:NYC\nEND:VEVENT\nEND:VCALENDAR');
-  })
+  });
+
+  it('prepends a data URL when userAgent is mobile', () => {
+    navigator.__defineGetter__('userAgent', function(){
+      return "Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1";
+    });
+
+    const result = buildShareUrl(testEvent, SHARE_SITES.ICAL);
+    expect(result).toEqual('data:text/calendar;charset=utf8BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nURL:about:blank\nDTSTART:20150126T000000+00:00\nDTEND:20150126T020000+00:00\nSUMMARY:Super Fun Event\nDESCRIPTION:Description of event. Going to have a lot of fun doing things that we scheduled ahead of time.\nLOCATION:NYC\nEND:VEVENT\nEND:VCALENDAR');
+  });
 });
