@@ -8,8 +8,14 @@ import { css } from 'emotion';
 registerLanguage('jsx', jsx);
 
 const styles = css`
-  width: 900px;
+  width: 100%;
+  max-width: 900px;
   margin: 0 auto !important;
+  font-size: 12px;
+
+  @media (min-width: 900px) {
+    font-size: 16px;
+  }
 `;
 
 export default function CodeSnippet({ children }) {

@@ -10,15 +10,25 @@ import { css } from 'emotion';
 import "./styles.css";
 
 const pageStyles = css`
-  width: 75%;
+  width: 100%;
+  padding: 0 20px;
   margin: 0 auto;
+
+  @media (min-width: 768px) {
+    width: 75%;
+    padding: 0;
+  }
 `;
 
 const componentStyles = css`
-  width: 50%;
+  width: 100%;
   margin: 0 auto;
   text-align: center;
   padding: 0 0 30px;
+
+  @media (min-width: 768px) {
+    width: 50%;
+  }
 `;
 
 const linkStyles = css`
