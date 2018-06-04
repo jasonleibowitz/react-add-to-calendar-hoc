@@ -14,6 +14,9 @@ In your project you most likely already have reusable button components to other
 
 It also doesn't have a bundled date library with it either, giving you the flexibility to use whatever library you want. MomentJS is the most popular, but it's incredibly large. You're in charge of formatting the dateTime string and providing it to this lib. It doesn't care what date lib you use.
 
+## Examples
+View examples [here](http://leibowitz.me/react-add-to-calendar-hoc/docs/).
+
 ## Installation
 Using [npm](https://www.npmjs.com/package/react-add-to-calendar-hoc)
 ```
