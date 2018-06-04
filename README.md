@@ -127,6 +127,7 @@ export default function Button({ children, onClick }) {
 
 <details>
 <summary>Modal Component</summary>
+  
 ```
 import React from 'react';
 import Modal from 'react-modal'; // You don't have to use react-modal, just consume the callback
