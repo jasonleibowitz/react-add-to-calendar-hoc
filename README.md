@@ -1,3 +1,6 @@
+[![npm](https://img.shields.io/npm/v/npm.svg)](https://www.npmjs.com/package/react-add-to-calendar-hoc)
+
+
 # React Add to Calendar HOC
 
 Coming Soon
