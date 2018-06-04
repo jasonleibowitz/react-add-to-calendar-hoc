@@ -1,5 +1,4 @@
-[![npm](https://img.shields.io/npm/v/npm.svg)](https://www.npmjs.com/package/react-add-to-calendar-hoc)
-
+[![npm version](https://badge.fury.io/js/react-add-to-calendar-hoc.svg)](https://badge.fury.io/js/react-add-to-calendar-hoc)
 
 # React Add to Calendar HOC
 
