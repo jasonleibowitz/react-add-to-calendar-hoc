@@ -35,6 +35,7 @@ var AddToCalendarHOC = require('react-add-to-calendar-hoc');
 ### Dropdown Example
 <details>
 <summary>Button Component</summary>
+  
 ```
 // components/my-button-component.jsx
 import React from 'react';
@@ -55,6 +56,7 @@ export default function Button({ children, onClick }) {
 
 <details>
 <summary>Dropdown Component</summary>
+  
 ```
 // components/my-dropdown-component.jsx
 import React from 'react';
@@ -101,6 +103,7 @@ export default function Component({ event }) {
 ### Modal Example
 <details>
 <summary>Button Component</summary>
+  
 ```
 // components/my-button-component.jsx
 import React from 'react';
