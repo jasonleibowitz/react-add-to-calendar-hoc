@@ -53,31 +53,9 @@ const yahooShareUrl = ({
   startDatetime,
   title,
 }) =>
-  `https://calendar.yahoo.com/v=60&view=d&type=20&title=${title}&st=${
+  `https://calendar.yahoo.com/?v=60&view=d&type=20&title=${title}&st=${
     startDatetime
   }&dur=${duration}&desc=${description}&in_loc=${location}`;
-
-/**
- * Takes an event object and returns a Outlook Web Calendar Event URL
- * @param {string} event.description
- * @param {string} event.endDatetime
- * @param {string} event.location
- * @param {string} event.startDatetime
- * @param {string} event.title
- * @returns {string} Outlook Web Calendar Event URL
- */
-const outlookWebUrl = ({
-  description,
-  endDatetime,
-  location,
-  startDatetime,
-  title,
-}) =>
-  `https://outlook.live.com/owa/?rru=addevent&startdt=${startDatetime}&enddt=${
-    endDatetime
-  }&subject=${title}&location=${location}&body=${
-    description
-  }&allday=false&uid=123&path=/calendar/view/Month`;
 
 /**
  * Takes an event object and returns an array to be downloaded as ics file
@@ -132,9 +110,9 @@ export const buildShareUrl = (
   const data = {
     description: encodeURI ? encodeURIComponent(description) : description,
     duration,
-    endDatetime: encodeURI ? formatDate(endDatetime) : endDatetime,
+    endDatetime: formatDate(endDatetime),
     location: encodeURI ? encodeURIComponent(location) : location,
-    startDatetime: encodeURI ? formatDate(startDatetime) : startDatetime,
+    startDatetime: formatDate(startDatetime),
     title: encodeURI ? encodeURIComponent(title) : title,
   };
 
@@ -143,8 +121,6 @@ export const buildShareUrl = (
       return googleShareUrl(data);
     case SHARE_SITES.YAHOO:
       return yahooShareUrl(data);
-    case SHARE_SITES.OUTLOOK_WEB:
-      return outlookWebUrl(data);
     default:
       return buildShareFile(data);
   }

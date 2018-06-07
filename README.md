@@ -38,7 +38,7 @@ var AddToCalendarHOC = require('react-add-to-calendar-hoc');
 ### Dropdown Example
 <details>
 <summary>Button Component</summary>
-  
+
 ```
 // components/my-button-component.jsx
 import React from 'react';
@@ -59,7 +59,7 @@ export default function Button({ children, onClick }) {
 
 <details>
 <summary>Dropdown Component</summary>
-  
+
 ```
 // components/my-dropdown-component.jsx
 import React from 'react';
@@ -106,7 +106,7 @@ export default function Component({ event }) {
 ### Modal Example
 <details>
 <summary>Button Component</summary>
-  
+
 ```
 // components/my-button-component.jsx
 import React from 'react';
@@ -127,7 +127,7 @@ export default function Button({ children, onClick }) {
 
 <details>
 <summary>Modal Component</summary>
-  
+
 ```
 import React from 'react';
 import Modal from 'react-modal'; // You don't have to use react-modal, just consume the callback
@@ -217,7 +217,7 @@ The component takes the following props
 |className     |string         |           |`null`                                |className to use on AddToCalendar container   |
 |dropdownProps |object         |           |`{}`                                  |Spread props to the dropdown or modal component you pass in to the HOC   |
 |event         |object         |Yes        |                                      |Event object we use to create calendar links   |
-|items         |array of enums |           |`[GOOGLE, ICAL, OUTLOOK_WEB, YAHOO]`  |By default AddToCalendar renders all of these calendar links. To render a subset of these provide a list of items using the enum SHARE_SITES, which is a named import from the library   |
+|items         |array of enums |           |`[GOOGLE, ICAL, OUTLOOK, YAHOO]`  |By default AddToCalendar renders all of these calendar links. To render a subset of these or to list them in a different order, provide a list of items using the enum SHARE_SITES, which is a named import from the library   |
 |linkProps     |object         |           |`{}`                                  |Spread props to the link components we render for each calendar item   |
 
 #### Event Object Shape
@@ -226,7 +226,7 @@ All of these properties are required.
 | Prop         | Type          | Description |
 |--------------|---------------|-------------|
 |description   |string  |Description of event. Put in the notes or body section of event.                                                                                 |
-|duration      |number  |Duration of event in hours. e.g. `2:00` or `2`. This is only used for Yahoo.                                                                     |
+|duration      |string  |Duration of event in hours. Must be four digits, e.g. `0200` or `0130`. This is only used for Yahoo.                                                                     |
 |endDatetime   |string  |End date time of event. Must be formatted in `YYYYMMDDTHHmmssZ` format. Use any date lib you want, but the format must match this.               |
 |location      |string  |Location of event. Use an address for best specificity and for Google Maps to populate a Map. Sometimes a location name will also populate a map. |
 |startDatetime |string  |Start date time of event. Must be formatted in `YYYYMMDDTHHmmssZ` format. Use any date lib you want, but the format must match this.             |
