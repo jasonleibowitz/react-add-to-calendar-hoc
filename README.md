@@ -217,7 +217,7 @@ The component takes the following props
 |className     |string         |           |`null`                                |className to use on AddToCalendar container   |
 |dropdownProps |object         |           |`{}`                                  |Spread props to the dropdown or modal component you pass in to the HOC   |
 |event         |object         |Yes        |                                      |Event object we use to create calendar links   |
-|items         |array of enums |           |`[GOOGLE, ICAL, OUTLOOK_WEB, YAHOO]`  |By default AddToCalendar renders all of these calendar links. To render a subset of these provide a list of items using the enum SHARE_SITES, which is a named import from the library   |
+|items         |array of enums |           |`[GOOGLE, ICAL, OUTLOOK, YAHOO]`  |By default AddToCalendar renders all of these calendar links. To render a subset of these or to list them in a different order, provide a list of items using the enum SHARE_SITES, which is a named import from the library   |
 |linkProps     |object         |           |`{}`                                  |Spread props to the link components we render for each calendar item   |
 
 #### Event Object Shape

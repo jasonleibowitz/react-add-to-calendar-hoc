@@ -1,6 +1,6 @@
 export const SHARE_SITES = {
   GOOGLE: 'Google',
   ICAL: 'iCal',
-  OUTLOOK_WEB: 'Outlook Web',
+  OUTLOOK: 'Outlook',
   YAHOO: 'Yahoo',
 };
