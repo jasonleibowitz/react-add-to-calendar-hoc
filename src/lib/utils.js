@@ -53,7 +53,7 @@ const yahooShareUrl = ({
   startDatetime,
   title,
 }) =>
-  `https://calendar.yahoo.com/v=60&view=d&type=20&title=${title}&st=${
+  `https://calendar.yahoo.com/?v=60&view=d&type=20&title=${title}&st=${
     startDatetime
   }&dur=${duration}&desc=${description}&in_loc=${location}`;
 
@@ -132,9 +132,9 @@ export const buildShareUrl = (
   const data = {
     description: encodeURI ? encodeURIComponent(description) : description,
     duration,
-    endDatetime: encodeURI ? formatDate(endDatetime) : endDatetime,
+    endDatetime: formatDate(endDatetime),
     location: encodeURI ? encodeURIComponent(location) : location,
-    startDatetime: encodeURI ? formatDate(startDatetime) : startDatetime,
+    startDatetime: formatDate(startDatetime),
     title: encodeURI ? encodeURIComponent(title) : title,
   };
 
