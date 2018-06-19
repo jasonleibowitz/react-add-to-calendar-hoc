@@ -87,7 +87,7 @@ const buildShareFile = ({
     'END:VCALENDAR',
   ].join('\n');
 
-  return isMobile() ? `data:text/calendar;charset=utf8,${content}` : content;
+  return isMobile() ? encodeURI(`data:text/calendar;charset=utf8,${content}`) : content;
 }
 
 /**
