@@ -105,7 +105,7 @@ export const buildShareUrl = (
   { description, duration, endDatetime, location, startDatetime, title },
   type,
 ) => {
-  const encodeURI = type !== SHARE_SITES.ICAL;
+  const encodeURI = type !== SHARE_SITES.ICAL && type !== SHARE_SITES.OUTLOOK;
 
   const data = {
     description: encodeURI ? encodeURIComponent(description) : description,
