@@ -9,6 +9,13 @@ import { SHARE_SITES } from './enums';
 export const formatDate = (date) => date && date.replace('+00:00', 'Z');
 
 /**
+ * Lets you know if msSaveOrOpenBlob should be used to download the ical file
+ */
+export const isInternetExplorer = () => {
+  return window.navigator && window.navigator.msSaveOrOpenBlob && window.Blob;
+};
+
+/**
  * Tests provided UserAgent against Known Mobile User Agents
  * @param {string} userAgent
  * @returns {bool} isMobileDevice
