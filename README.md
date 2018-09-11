@@ -241,5 +241,10 @@ If you believe you've found an issue, please [report it](https://github.com/jaso
 ## Contributions
 Coming Soon
 
+## Compatibility
+<img src="https://www.browserstack.com/images/mail/chrome-on-ios/chrome-on-ios-bslogo.png" width="250">
+
+This component is expected to work on modern browsers, but if it breaks on a particular browser please [file an issue](https://github.com/jasonleibowitz/react-add-to-calendar-hoc/issues/new?template=1.Bug_report.md). We can check the problem using [browserstack](http://browserstack.com) - a great service for cross-browser testing. They also support open source projects like this one.
+
 ## License
 MIT

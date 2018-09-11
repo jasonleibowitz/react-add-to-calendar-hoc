@@ -1,6 +1,6 @@
 {
   "name": "react-add-to-calendar-hoc",
-  "version": "1.0.4",
+  "version": "1.0.6",
   "description": "Simple Unopinionated React Add to Calendar Button. Bring your own components.",
   "main": "lib/index.js",
   "scripts": {
