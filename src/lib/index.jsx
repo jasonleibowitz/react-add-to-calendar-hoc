@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { SHARE_SITES } from './enums';
-import { buildShareUrl, formatDate } from './utils';
+import { buildShareUrl, formatDate, isInternetExplorer } from './utils';
 
 export { SHARE_SITES };
 export default function AddToCalendar(WrappedButton, WrappedDropdown) {
@@ -13,10 +13,10 @@ export default function AddToCalendar(WrappedButton, WrappedDropdown) {
       dropdownProps: PropTypes.shape(),
       event: PropTypes.shape({
         description: PropTypes.string,
-        duration: PropTypes.string,
-        endDatetime: PropTypes.string,
+        duration: PropTypes.string.isRequired,
+        endDatetime: PropTypes.string.isRequired,
         location: PropTypes.string,
-        startDatetime: PropTypes.string,
+        startDatetime: PropTypes.string.isRequired,
         title: PropTypes.string,
       }).isRequired,
       items: PropTypes.arrayOf(PropTypes.oneOf(Object.values(SHARE_SITES))),
@@ -43,12 +43,16 @@ export default function AddToCalendar(WrappedButton, WrappedDropdown) {
         const filename = 'download.ics';
         const blob = new Blob([url], { type: 'text/calendar;charset=utf-8' });
 
-        const link = document.createElement('a');
-        link.href = window.URL.createObjectURL(blob);
-        link.setAttribute('download', filename);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        if (isInternetExplorer()) {
+          window.navigator.msSaveOrOpenBlob(blob, filename);
+        } else {
+          const link = document.createElement('a');
+          link.href = window.URL.createObjectURL(blob);
+          link.setAttribute('download', filename);
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
       } else {
         window.open(url, '_blank');
       }

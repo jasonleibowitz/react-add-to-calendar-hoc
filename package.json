@@ -5,8 +5,8 @@
   "main": "lib/index.js",
   "scripts": {
     "dev": "concurrently \"npm run lib:watch\" \"npm run docs\"",
-    "lib": "babel src/lib -d lib --copy-files",
-    "lib:watch": "babel src/lib -w -d lib --copy-files",
+    "lib": "babel src/lib -d lib --ignore 'src/lib/**/*.test.js'",
+    "lib:watch": "babel src/lib -w -d lib --ignore 'src/lib/**/*.test.js'",
     "docs": "webpack-dev-server --mode development",
     "docs:prod": "webpack --mode production",
     "test": "jest --coverage"
@@ -18,6 +18,7 @@
     "react-dom": "^15.3.0 || ^16.2.0"
   },
   "dependencies": {
+    "core-js": "^2.5.7",
     "prop-types": "^15.6.2"
   },
   "devDependencies": {

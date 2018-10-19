@@ -12,10 +12,15 @@ export const formatDate = date => date && date.replace('+00:00', 'Z');
 
 /**
  * Tests provided UserAgent against Known Mobile User Agents
- * @param {string} userAgent
  * @returns {bool} isMobileDevice
  */
 export const isMobile = () => /Mobile|iP(hone|od|ad)|Android|BlackBerry|IEMobile/.test(window.navigator.userAgent || window.navigator.vendor || window.opera);
+
+/**
+ * Tests userAgent to see if browser is IE
+ * @returns {bool} isInternetExplorer
+ */
+export const isInternetExplorer = () => /MSIE/.test(window.navigator.userAgent) || /Trident/.test(window.navigator.userAgent);
 
 /**
  * Takes an event object and returns a Google Calendar Event URL
@@ -67,17 +72,18 @@ const yahooShareUrl = ({
  * @returns {array} ICS Content
  */
 const buildShareFile = ({
-  description,
+  description = '',
   endDatetime,
-  location,
+  location = '',
   startDatetime,
-  title,
+  title = '',
 }) => {
   let content = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
     'BEGIN:VEVENT',
     `URL:${document.URL}`,
+    'METHOD:PUBLISH',
     `DTSTART:${startDatetime}`,
     `DTEND:${endDatetime}`,
     `SUMMARY:${title}`,
@@ -102,7 +108,7 @@ const buildShareFile = ({
  * @param {enum} type One of SHARE_SITES from ./enums
  */
 export const buildShareUrl = (
-  { description, duration, endDatetime, location, startDatetime, title },
+  { description = '', duration, endDatetime, location = '', startDatetime, title = '' },
   type,
 ) => {
   const encodeURI = type !== SHARE_SITES.ICAL && type !== SHARE_SITES.OUTLOOK;
