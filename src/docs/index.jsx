@@ -45,9 +45,14 @@ const titleStyles = css`
   text-align: center;
 `;
 
-const subTitleSTyles = css`
+const subTitleStyles = css`
   margin: 50px 0;
   text-align: center;
+`;
+
+const paragraphStyles = css`
+  margin: 30px auto;
+  width: 80%;
 `;
 
 const startDatetime = moment().utc().add(2, 'days');
@@ -63,6 +68,7 @@ const event = {
 
 const AddToCalendarDropdown = AddToCalendarHOC(Button, Dropdown);
 const AddToCalendarModal = AddToCalendarHOC(Button, CalendarModal);
+const isiOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
 
 function Demo() {
   return (
@@ -71,7 +77,7 @@ function Demo() {
         Examples of React Add to Calendar HOC
       </h1>
       <div>
-        <h2 className={subTitleSTyles}>Event passed into examples</h2>
+        <h2 className={subTitleStyles}>Event passed into examples</h2>
         <CodeSnippet>
           {`
   const startDatetime = moment().utc().add(2, 'days');
@@ -88,7 +94,7 @@ function Demo() {
           `}
         </CodeSnippet>
       </div>
-      <h2 className={subTitleSTyles}>Dropdown Example</h2>
+      <h2 className={subTitleStyles}>Dropdown Example</h2>
       <AddToCalendarDropdown
         className={componentStyles}
         linkProps={{
@@ -110,7 +116,7 @@ function Demo() {
       `}
       </CodeSnippet>
 
-      <h2 className={subTitleSTyles}>Modal Example</h2>
+      <h2 className={subTitleStyles}>Modal Example</h2>
       <AddToCalendarModal
         className={componentStyles}
         linkProps={{
@@ -132,7 +138,7 @@ function Demo() {
       `}
       </CodeSnippet>
 
-      <h2 className={subTitleSTyles}>Customized Item List Example</h2>
+      <h2 className={subTitleStyles}>Customized Item List Example</h2>
       <AddToCalendarModal
         className={componentStyles}
         linkProps={{
@@ -152,6 +158,32 @@ function Demo() {
     }}
     event={event}
     items={[SHARE_SITES.GOOGLE, SHARE_SITES.ICAL]}
+  />
+      `}
+      </CodeSnippet>
+
+      <h2 className={subTitleStyles}>Handle iPhone Options</h2>
+      <p className={paragraphStyles}>iPhones don't allow users to select which app they want to open ics files with, so there is no reason to offer both iCal and Outlook options for users on iOS devices. This example shows how to conditionally change which items to display based on the user's device.</p>
+      <AddToCalendarModal
+        className={componentStyles}
+        linkProps={{
+          className: linkStyles,
+        }}
+        event={event}
+        items={isiOS ? [SHARE_SITES.GOOGLE, SHARE_SITES.ICAL, SHARE_SITES.YAHOO] : undefined}
+      />
+      <CodeSnippet>
+      {`
+  const AddToCalendarModal = AddToCalendarHOC(Button, CalendarModal);
+  const isiOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  ...
+  <AddToCalendarModal
+    className={componentStyles}
+    linkProps={{
+      className: linkStyles,
+    }}
+    event={event}
+    items={isiOS ? [SHARE_SITES.GOOGLE, SHARE_SITES.ICAL, SHARE_SITES.YAHOO] : null}
   />
       `}
       </CodeSnippet>
