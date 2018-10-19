@@ -12,10 +12,15 @@ export const formatDate = date => date && date.replace('+00:00', 'Z');
 
 /**
  * Tests provided UserAgent against Known Mobile User Agents
- * @param {string} userAgent
  * @returns {bool} isMobileDevice
  */
 export const isMobile = () => /Mobile|iP(hone|od|ad)|Android|BlackBerry|IEMobile/.test(window.navigator.userAgent || window.navigator.vendor || window.opera);
+
+/**
+ * Tests userAgent to see if browser is IE
+ * @returns {bool} isInternetExplorer
+ */
+export const isInternetExplorer = () => /MSIE/.test(window.navigator.userAgent) || /Trident/.test(window.navigator.userAgent);
 
 /**
  * Takes an event object and returns a Google Calendar Event URL

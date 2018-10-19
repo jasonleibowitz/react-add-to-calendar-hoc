@@ -1,3 +1,6 @@
+import 'core-js/es6';
+import 'core-js/es7';
+
 import React from "react";
 import { render } from "react-dom";
 import AddToCalendarHOC, { SHARE_SITES } from "../../lib";
