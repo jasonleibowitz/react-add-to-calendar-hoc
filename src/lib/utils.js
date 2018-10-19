@@ -72,11 +72,11 @@ const yahooShareUrl = ({
  * @returns {array} ICS Content
  */
 const buildShareFile = ({
-  description,
+  description = '',
   endDatetime,
-  location,
+  location = '',
   startDatetime,
-  title,
+  title = '',
 }) => {
   let content = [
     'BEGIN:VCALENDAR',
@@ -107,7 +107,7 @@ const buildShareFile = ({
  * @param {enum} type One of SHARE_SITES from ./enums
  */
 export const buildShareUrl = (
-  { description, duration, endDatetime, location, startDatetime, title },
+  { description = '', duration, endDatetime, location = '', startDatetime, title = '' },
   type,
 ) => {
   const encodeURI = type !== SHARE_SITES.ICAL && type !== SHARE_SITES.OUTLOOK;

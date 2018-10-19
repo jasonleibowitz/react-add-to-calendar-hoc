@@ -13,10 +13,10 @@ export default function AddToCalendar(WrappedButton, WrappedDropdown) {
       dropdownProps: PropTypes.shape(),
       event: PropTypes.shape({
         description: PropTypes.string,
-        duration: PropTypes.string,
-        endDatetime: PropTypes.string,
+        duration: PropTypes.string.isRequired,
+        endDatetime: PropTypes.string.isRequired,
         location: PropTypes.string,
-        startDatetime: PropTypes.string,
+        startDatetime: PropTypes.string.isRequired,
         title: PropTypes.string,
       }).isRequired,
       items: PropTypes.arrayOf(PropTypes.oneOf(Object.values(SHARE_SITES))),
