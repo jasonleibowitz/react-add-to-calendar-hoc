@@ -56,9 +56,12 @@ const subTitleSTyles = css`
 const startDatetime = moment().utc().add(2, 'days');
 const endDatetime = startDatetime.clone().add(2, 'hours');
 const event = {
+  description: 'Description of event. Going to have a lot of fun doing things that we scheduled ahead of time.',
   duration: '0200',
   endDatetime: endDatetime.format('YYYYMMDDTHHmmssZ'),
+  location: 'NYC',
   startDatetime: startDatetime.format('YYYYMMDDTHHmmssZ'),
+  title: 'Super Fun Event',
 }
 
 const AddToCalendarDropdown = AddToCalendarHOC(Button, Dropdown);
