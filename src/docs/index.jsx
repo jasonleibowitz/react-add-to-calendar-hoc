@@ -138,6 +138,30 @@ function Demo() {
       `}
       </CodeSnippet>
 
+      <h2 className={subTitleStyles}>Custom Button Text</h2>
+      <AddToCalendarModal
+        className={componentStyles}
+        buttonText="Custom Button Text"
+        linkProps={{
+          className: linkStyles,
+        }}
+        event={event}
+      />
+      <CodeSnippet>
+      {`
+  const AddToCalendarModal = AddToCalendarHOC(Button, CalendarModal);
+  ...
+  <AddToCalendarModal
+    className={componentStyles}
+    buttonText="Custom Button Text"
+    linkProps={{
+      className: linkStyles,
+    }}
+    event={event}
+  />
+      `}
+      </CodeSnippet>
+
       <h2 className={subTitleStyles}>Customized Item List Example</h2>
       <AddToCalendarModal
         className={componentStyles}
