@@ -83,7 +83,7 @@ const buildShareFile = ({
     'VERSION:2.0',
     'BEGIN:VEVENT',
     `URL:${document.URL}`,
-    `METHOD:PUBLISH`,
+    'METHOD:PUBLISH',
     `DTSTART:${startDatetime}`,
     `DTEND:${endDatetime}`,
     `SUMMARY:${title}`,
