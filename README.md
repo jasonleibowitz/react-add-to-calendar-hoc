@@ -235,6 +235,14 @@ All of these properties are required.
 ## Dependencies
 React Add to Calendar HOC has _zero_ external dependencies.
 
+## Edge Cases
+Because this library aims to be extremely unopinionated and lightweight it doesn't handle most edge cases, instead letting you handle them as you'd like. Here are some common edge cases and recommendations for what to do.
+
+#### Open in Outlook doesn't work on iOS
+The option to download an ICS file to open in Outlook won't work on iOS because iOS devices don't let you choose which app to open certain files in. iOS devices will always open any ics in the default calendar overlay.
+
+You can handle this case by checking if the user's device is iOS and then customizing the list of items. There's an example in the docs to handle this exact edge case. Look for the section "Handle iPhone Options".
+
 ## Reporting Issues
 If you believe you've found an issue, please [report it](https://github.com/jasonleibowitz/react-add-to-calendar-hoc/issues) along with any relevant details to reproduce it.
 
