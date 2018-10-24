@@ -33,180 +33,6 @@ import AddToCalendarHOC from 'react-add-to-calendar-hoc';
 var AddToCalendarHOC = require('react-add-to-calendar-hoc');
 ```
 
-## Usage
-
-### Dropdown Example
-<details>
-<summary>Button Component</summary>
-
-```
-// components/my-button-component.jsx
-import React from 'react';
-import styles from './styles.js'; // You can style your component however you want
-
-export default function Button({ children, onClick }) {
-  return (
-    <button
-      className={styles}
-      onClick={onClick}
-    >
-      {children}
-    </button>
-  );
-}
-```
-</details>
-
-<details>
-<summary>Dropdown Component</summary>
-
-```
-// components/my-dropdown-component.jsx
-import React from 'react';
-import styles from './styles.js'; // You can style your component however you want
-
-export default function Dropdown({ children }) {
-  return (
-    <div className={styles}>
-      {children}
-    </div>
-  );
-}
-```
-</details>
-
-```
-import React from 'react';
-import moment from 'moment';
-import ReactAddToCalendarHOC from 'react-add-to-calendar-hoc';
-import Button from 'components/my-button-component';
-import Dropdown from 'components/my-dropdown-component';
-
-const AddToCalendar = AddToCalendarHOC(Button, Dropdown);
-
-export default function Component({ event }) {
-  const startDatetime = moment(event.startDatetime).utc().format('YYYYMMDDTHHmmssZ');
-  const endDatetime = moment(event.startDatetime).utc().format('YYYYMMDDTHHmmssZ');
-  const duration = endTime.diff(startTime, 'hours');
-  return (
-    <AddToCalendar
-      event={{
-        description: event.description,
-        duration,
-        endDatetime,
-        location: event.location,
-        startDatetime,
-        title: event.title,
-      }}
-    />
-  );
-}
-```
-
-### Modal Example
-<details>
-<summary>Button Component</summary>
-
-```
-// components/my-button-component.jsx
-import React from 'react';
-import styles from './styles.js'; // You can style your component however you want
-
-export default function Button({ children, onClick }) {
-  return (
-    <button
-      className={styles}
-      onClick={onClick}
-    >
-      {children}
-    </button>
-  );
-}
-```
-</details>
-
-<details>
-<summary>Modal Component</summary>
-
-```
-import React from 'react';
-import Modal from 'react-modal'; // You don't have to use react-modal, just consume the callback
-import Button from 'components/my-button-component';
-import styles from './styles.js' // You can style your component however you want
-
-export default function CalendarModal({
-  children,
-  isOpen,
-  onRequestClose,
-}) {
-return (
-  <Modal
-    className={styles}
-    isOpen={isOpen}
-    onRequestClose={onRequestClose}
-    shouldCloseOnOverlayClick={true}
-  >
-    <h2>Add to Calendar</h2>
-    <div>{children}</div>
-    <Button onClick={onRequestClose}>Cancel</Button>
-  </Modal>
-);
-```
-</details>
-
-```
-import React from 'react';
-import moment from 'moment';
-import ReactAddToCalendarHOC from 'react-add-to-calendar-hoc';
-import Button from 'components/my-button-component';
-import Modal from 'components/my-modal-component';
-
-const AddToCalendar = AddToCalendarHOC(Button, Modal);
-
-export default function Component({ event }) {
-  const startDatetime = moment(event.startDatetime).utc().format('YYYYMMDDTHHmmssZ');
-  const endDatetime = moment(event.startDatetime).utc().format('YYYYMMDDTHHmmssZ');
-  const duration = endTime.diff(startTime, 'hours');
-  return (
-    <AddToCalendar
-      event={{
-        description: event.description,
-        duration,
-        endDatetime,
-        location: event.location,
-        startDatetime,
-        title: event.title,
-      }}
-    />
-  );
-}
-```
-
-### Customize list of calendar links
-```
-import React from 'react';
-import moment from 'moment';
-import ReactAddToCalendarHOC, { SHARE_SITES } from 'react-add-to-calendar-hoc';
-import Button from 'components/my-button-component';
-import Modal from 'components/my-modal-component';
-
-const AddToCalendar = AddToCalendarHOC(Button, Modal);
-
-  return (
-    <AddToCalendar
-      event={{
-        description: event.description,
-        duration,
-        endDatetime,
-        location: event.location,
-        startDatetime,
-        title: event.title,
-      }}
-      items={[SHARE_SITES.GOOGLE, SHARE_SITES.ICAL]}
-    />
-  );
-```
-
 #### Props
 The component takes the following props
 
@@ -227,9 +53,10 @@ All of these properties are required.
 |--------------|---------------|-------------|
 |description   |string  |Description of event. Put in the notes or body section of event.                                                                                 |
 |duration      |string  |Duration of event in hours. Must be four digits, e.g. `0200` or `0130`. This is only used for Yahoo.                                                                     |
-|endDatetime   |string  |End date time of event. Must be formatted in `YYYYMMDDTHHmmssZ` format. Use any date lib you want, but the format must match this.               |
+|endDatetime   |string  |End date time of event. Must be formatted in `YYYYMMDDTHHmmssZ` format or `YYYYMMDDTHHmmss` if timezone is also provided. Use any date lib you want, but the format must match this.               |
 |location      |string  |Location of event. Use an address for best specificity and for Google Maps to populate a Map. Sometimes a location name will also populate a map. |
-|startDatetime |string  |Start date time of event. Must be formatted in `YYYYMMDDTHHmmssZ` format. Use any date lib you want, but the format must match this.             |
+|startDatetime |string  |Start date time of event. Must be formatted in `YYYYMMDDTHHmmssZ` format or `YYYYMMDDTHHmmss` if timezone is also provided. Use any date lib you want, but the format must match this.             |
+|timezone      |string  |Valid TZ env variable. See list of [valid options here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).
 |title         |string  |Name of your event.                                                                                                                              |
 
 ## Dependencies
@@ -242,6 +69,11 @@ Because this library aims to be extremely unopinionated and lightweight it doesn
 The option to download an ICS file to open in Outlook won't work on iOS because iOS devices don't let you choose which app to open certain files in. iOS devices will always open any ics in the default calendar overlay.
 
 You can handle this case by checking if the user's device is iOS and then customizing the list of items. There's an example in the docs to handle this exact edge case. Look for the section "Handle iPhone Options".
+
+#### How do I specify an event in a specific timezone
+Instead of passing `startDatetime` and `endDatetime` as UTC values pass in local time formats, i.e. `YYYYMMDDTHHmmss` and also provide a valid `timezone` property. (For a list of valid properties [see the TZ column here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)).
+
+Doing this will ensure that regardless of the user's local timezone the event created will always be in the correct time for the timezone you specified. It will also include a timezone property in the created event so the user knows what timezone the event is in.
 
 ## Reporting Issues
 If you believe you've found an issue, please [report it](https://github.com/jasonleibowitz/react-add-to-calendar-hoc/issues) along with any relevant details to reproduce it.

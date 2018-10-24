@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { SHARE_SITES } from './enums';
-import { buildShareUrl, formatDate, isInternetExplorer } from './utils';
+import { buildShareUrl, isInternetExplorer } from './utils';
 
 export { SHARE_SITES };
 export default function AddToCalendar(WrappedButton, WrappedDropdown) {
