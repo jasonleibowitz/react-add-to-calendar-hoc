@@ -7,7 +7,7 @@ import AddToCalendarHOC, { SHARE_SITES } from "../../lib";
 import Button from './Button';
 import Dropdown from './Dropdown';
 import CalendarModal from './Modal';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import CodeSnippet from './CodeSnippet';
 import { css } from 'emotion';
 import "./styles.css";
@@ -48,6 +48,14 @@ const titleStyles = css`
   text-align: center;
 `;
 
+const highlightText = css`
+  font-family: Courier;
+  font-style: italic;
+  color: rgb(218, 49, 80);
+  background-color: #FFF;
+  padding: 1px 4px;
+`;
+
 const subTitleStyles = css`
   margin: 50px 0;
   text-align: center;
@@ -67,6 +75,14 @@ const event = {
   location: 'NYC',
   startDatetime: startDatetime.format('YYYYMMDDTHHmmssZ'),
   title: 'Super Fun Event',
+}
+
+const eventInDifferentTimezone = {
+  ...event,
+  location: 'London',
+  endDatetime: moment().tz('Europe/London').add(2, 'days').add(2, 'hours').format('YYYYMMDDTHHmmss'),
+  startDatetime: moment().tz('Europe/London').add(2, 'days').format('YYYYMMDDTHHmmss'),
+  timezone: 'Europe/London',
 }
 
 const AddToCalendarDropdown = AddToCalendarHOC(Button, Dropdown);
@@ -211,6 +227,38 @@ function Demo() {
     }}
     event={event}
     items={isiOS ? [SHARE_SITES.GOOGLE, SHARE_SITES.ICAL, SHARE_SITES.YAHOO] : null}
+  />
+      `}
+      </CodeSnippet>
+
+    <h2 className={subTitleStyles}>Handle Timezones</h2>
+      <p className={paragraphStyles}>To support events in a specific timezone you have to do a couple of things. First, pass in an additional property, <span className={highlightText}>timezone</span>. The value of this should be a valid TZ environment variable (<a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones" target="_blank" rel="noopener noreferrer">See here</a> for a list).</p>
+      <p className={paragraphStyles}>You should also pass the value of <span className={highlightText}>startDatetime</span> and <span className={highlightText}>endDatetime</span> as local values and not UTC. In other words, if you want to create an event at 11am EST you should pass in a time value of 11am, not 7am UTC (EST has -04:00 offset). You can do this by formatting the date as <span className={highlightText}>YYYYMMDDTHHmmss</span> - without the Z property.</p>
+      <p className={paragraphStyles}>Doing this will result in two things -- regardless of the timezone of your users, the event will always be created at the correct time for the timezone set. Secondly, the event will now include timezone information, i.e. it will say Eastern Time.</p>
+      <AddToCalendarModal
+        className={componentStyles}
+        linkProps={{
+          className: linkStyles,
+        }}
+        event={eventInDifferentTimezone}
+      />
+      <CodeSnippet>
+      {`
+  const AddToCalendarModal = AddToCalendarHOC(Button, CalendarModal);
+  const eventInDifferentTimezone = {
+    ...event,
+    location: 'London',
+    endDatetime: moment().tz('Europe/London').add(2, 'days').add(2, 'hours').format('YYYYMMDDTHHmmss'),
+    startDatetime: moment().tz('Europe/London').add(2, 'days').format('YYYYMMDDTHHmmss'),
+    timezone: 'Europe/London',
+  }
+  ...
+  <AddToCalendarModal
+    className={componentStyles}
+    linkProps={{
+      className: linkStyles,
+    }}
+    event={eventInDifferentTimezone}
   />
       `}
       </CodeSnippet>

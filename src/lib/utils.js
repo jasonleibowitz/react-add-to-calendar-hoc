@@ -9,7 +9,6 @@ import { SHARE_SITES } from './enums';
  */
 export const formatDate = date => date && date.replace('+00:00', 'Z');
 
-
 /**
  * Tests provided UserAgent against Known Mobile User Agents
  * @returns {bool} isMobileDevice
@@ -36,11 +35,12 @@ const googleShareUrl = ({
   endDatetime,
   location,
   startDatetime,
+  timezone,
   title,
 }) =>
   `https://calendar.google.com/calendar/render?action=TEMPLATE&dates=${
     startDatetime
-  }/${endDatetime}&location=${location}&text=${title}&details=${description}`;
+  }/${endDatetime}&ctz=${timezone}&location=${location}&text=${title}&details=${description}`;
 
 /**
  * Takes an event object and returns a Yahoo Calendar Event URL
@@ -73,9 +73,11 @@ const yahooShareUrl = ({
  */
 const buildShareFile = ({
   description = '',
+  ctz = '',
   endDatetime,
   location = '',
   startDatetime,
+  timezone = '',
   title = '',
 }) => {
   let content = [
@@ -84,8 +86,10 @@ const buildShareFile = ({
     'BEGIN:VEVENT',
     `URL:${document.URL}`,
     'METHOD:PUBLISH',
-    `DTSTART:${startDatetime}`,
-    `DTEND:${endDatetime}`,
+    // TODO: Will need to parse the date without Z for ics
+    // This means I'll probably have to require a date lib - luxon most likely or datefns
+    timezone === '' ? `DTSTART:${startDatetime}` : `DTSTART;TZID=${timezone}:${startDatetime}`,
+    timezone === '' ? `DTEND:${endDatetime}` : `DTEND;TZID=${timezone}:${endDatetime}`,
     `SUMMARY:${title}`,
     `DESCRIPTION:${description}`,
     `LOCATION:${location}`,
@@ -108,7 +112,7 @@ const buildShareFile = ({
  * @param {enum} type One of SHARE_SITES from ./enums
  */
 export const buildShareUrl = (
-  { description = '', duration, endDatetime, location = '', startDatetime, title = '' },
+  { description = '', duration, endDatetime, location = '', startDatetime, timezone = '', title = '' },
   type,
 ) => {
   const encodeURI = type !== SHARE_SITES.ICAL && type !== SHARE_SITES.OUTLOOK;
@@ -119,6 +123,7 @@ export const buildShareUrl = (
     endDatetime: formatDate(endDatetime),
     location: encodeURI ? encodeURIComponent(location) : location,
     startDatetime: formatDate(startDatetime),
+    timezone,
     title: encodeURI ? encodeURIComponent(title) : title,
   };
 
