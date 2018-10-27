@@ -52,7 +52,7 @@ All of these properties are required.
 | Prop         | Type          | Description |
 |--------------|---------------|-------------|
 |description   |string  |Description of event. Put in the notes or body section of event.                                                                                 |
-|duration      |string  |Duration of event in hours. Must be four digits, e.g. `0200` or `0130`. This is only used for Yahoo.                                                                     |
+|duration      |string or number  |Duration of event in hours. If string, must be four digits, e.g. `'0200'` or `'0130'`. If number, must represent hours in decimal form, i.e. `2` or `2.15`. This is only used for Yahoo.                                                                     |
 |endDatetime   |string  |End date time of event. Must be formatted in `YYYYMMDDTHHmmssZ` format or `YYYYMMDDTHHmmss` if timezone is also provided. Use any date lib you want, but the format must match this.               |
 |location      |string  |Location of event. Use an address for best specificity and for Google Maps to populate a Map. Sometimes a location name will also populate a map. |
 |startDatetime |string  |Start date time of event. Must be formatted in `YYYYMMDDTHHmmssZ` format or `YYYYMMDDTHHmmss` if timezone is also provided. Use any date lib you want, but the format must match this.             |

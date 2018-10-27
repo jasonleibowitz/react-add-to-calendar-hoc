@@ -5,10 +5,11 @@ import React from "react";
 import { render } from "react-dom";
 import AddToCalendarHOC, { SHARE_SITES } from "../../lib";
 import Button from './Button';
-import Dropdown from './Dropdown';
 import CalendarModal from './Modal';
-import moment from 'moment-timezone';
 import CodeSnippet from './CodeSnippet';
+import Dropdown from './Dropdown';
+import { DateTime } from 'luxon';
+import moment from 'moment-timezone';
 import { css } from 'emotion';
 import "./styles.css";
 
@@ -68,9 +69,10 @@ const paragraphStyles = css`
 
 const startDatetime = moment().utc().add(2, 'days');
 const endDatetime = startDatetime.clone().add(2, 'hours');
+const duration = endDatetime.diff(startDatetime, 'hours');
 const event = {
   description: 'Description of event. Going to have a lot of fun doing things that we scheduled ahead of time.',
-  duration: '0200',
+  duration,
   endDatetime: endDatetime.format('YYYYMMDDTHHmmssZ'),
   location: 'NYC',
   startDatetime: startDatetime.format('YYYYMMDDTHHmmssZ'),
@@ -83,6 +85,16 @@ const eventInDifferentTimezone = {
   endDatetime: moment().tz('Europe/London').add(2, 'days').add(2, 'hours').format('YYYYMMDDTHHmmss'),
   startDatetime: moment().tz('Europe/London').add(2, 'days').format('YYYYMMDDTHHmmss'),
   timezone: 'Europe/London',
+}
+
+const luxonStart = DateTime.fromObject({ year: 2018, month: 10, day: 24, hour: 12, minute: 15, zone: 'America/New_York' });
+const luxonEnd = DateTime.fromObject({ year: 2018, month: 10, day: 24, hour: 14, minute: 15, zone: 'America/New_York' });
+const luxonEvent = {
+  ...event,
+  startDatetime: `${luxonStart.toFormat('yyyyLLdd')}T${luxonStart.toFormat('HHmmss')}`,
+  endDatetime: `${luxonEnd.toFormat('yyyyLLdd')}T${luxonEnd.toFormat('HHmmss')}`,
+  location: 'NYC',
+  timezone: 'America/New_York',
 }
 
 const AddToCalendarDropdown = AddToCalendarHOC(Button, Dropdown);
@@ -101,7 +113,7 @@ function Demo() {
           {`
   const startDatetime = moment().utc().add(2, 'days');
   const endDatetime = startDatetime.clone().add(2, 'hours');
-  const duration = endDatetime.diff(startDatetime, 'hours');
+  const duration = moment.duration(endDatetime.diff(startDatetime)).asHours();
   const event = {
     description: 'Description of event. Going to have a lot of fun doing things that we scheduled ahead of time.',
     duration,
@@ -251,6 +263,43 @@ function Demo() {
     endDatetime: moment().tz('Europe/London').add(2, 'days').add(2, 'hours').format('YYYYMMDDTHHmmss'),
     startDatetime: moment().tz('Europe/London').add(2, 'days').format('YYYYMMDDTHHmmss'),
     timezone: 'Europe/London',
+  }
+  ...
+  <AddToCalendarModal
+    className={componentStyles}
+    linkProps={{
+      className: linkStyles,
+    }}
+    event={eventInDifferentTimezone}
+  />
+      `}
+      </CodeSnippet>
+
+          <h2 className={subTitleStyles}>Use Moment Alternative</h2>
+      <p className={paragraphStyles}>Moment is known to be a MASSIVE library. v2.22.2 is 64.2kb minified + gzipped and moment-timezone v0.5.21 is 89.8kb minified + gzipped. There are plenty of other date time libraries for JS that are way smaller. Using one of these helps you avoid overly bloating your application and sending too many vendor files to the client. One great option is Luxon. Luxon v.1.4.4 is 16.9kb minified + gzipped.</p>
+      <p className={paragraphStyles}>This example shows how to use the Luxon library (instead of Moment) to construct <span className={highlightText}>startDatetime</span> and <span className={highlightText}>endDatetime</span></p>
+      <AddToCalendarModal
+        className={componentStyles}
+        linkProps={{
+          className: linkStyles,
+        }}
+        event={luxonEvent}
+      />
+      <CodeSnippet>
+      {`
+  const AddToCalendarModal = AddToCalendarHOC(Button, CalendarModal);
+  const startTime = DateTime.fromObject({ year: 2018, month: 10, day, 25, hour: 12 });
+  const endTime = startTime.plus({ hours: 2 });
+  const duration = endDatetime.diff(startDatetime).as('hours');
+  const eventInDifferentTimezone = {
+    ...event,
+    description: 'Description of event. Going to have a lot of fun doing things that we scheduled ahead of time.',
+    duration,
+    endDatetime: endTime.toFormat('YYYYMMDDTHHmmss'),
+    location: 'London',
+    startDatetime: startTime.toFormat('YYYYMMDDTHHmmss'),
+    timezone: 'Europe/London',
+    title: 'Super Fun Event',
   }
   ...
   <AddToCalendarModal
