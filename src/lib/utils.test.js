@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { SHARE_SITES } from './enums';
-import { buildShareUrl, formatDate, formatDuration } from './utils';
+import { buildShareUrl, formatDate, formatDuration, isInternetExplorer, isMobile } from './utils';
 
 const testEvent = {
   description: 'Description of event. Going to have a lot of fun doing things that we scheduled ahead of time.',
@@ -74,4 +74,80 @@ describe('buildShareUrl', () => {
       expect(result).toEqual(encodeURI(expectedOutputs.icsMobile));
     });
   });
+});
+
+describe('isInternetExplorer', () => {
+  it('returns true is userAgent is IE 11', () => {
+    navigator.__defineGetter__('userAgent', function(){
+      return "Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; .NET4.0C; .NET4.0E; .NET CLR 2.0.50727; .NET CLR 3.0.30729; .NET CLR 3.5.30729; rv:11.0) like Gecko";
+    });
+
+    const result = isInternetExplorer();
+    expect(result).toBe(true);
+  });
+
+  it('returns true is userAgent is IE 10', () => {
+    navigator.__defineGetter__('userAgent', function(){
+      return "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; WOW64; Trident/6.0; .NET4.0E; .NET4.0C; .NET CLR 3.5.30729; .NET CLR 2.0.50727; .NET CLR 3.0.30729)";
+    });
+
+    const result = isInternetExplorer();
+    expect(result).toBe(true);
+  });
+
+  it('returns true is userAgent is IE 9', () => {
+    navigator.__defineGetter__('userAgent', function(){
+      return "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; .NET4.0C; .NET4.0E)";
+    });
+
+    const result = isInternetExplorer();
+    expect(result).toBe(true);
+  });
+
+  it('returns false is userAgent is MS Edge', () => {
+    navigator.__defineGetter__('userAgent', function(){
+      return "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36";
+    });
+
+    const result = isInternetExplorer();
+    expect(result).toBe(false);
+  });
+
+  it('returns false is userAgent is not IE', () => {
+    navigator.__defineGetter__('userAgent', function(){
+      return "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36";
+    });
+
+    const result = isInternetExplorer();
+    expect(result).toBe(false);
+  });
+})
+
+describe('isMobile', () => {
+  it('returns true if userAgent is iPhone', () => {
+    navigator.__defineGetter__('userAgent', function(){
+      return "Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1";
+    });
+
+    const result = isMobile();
+    expect(result).toBe(true);
+  });
+
+  it('returns true if userAgent is Android', () => {
+    navigator.__defineGetter__('userAgent', function(){
+      return "Mozilla/5.0 (Linux; Android 8.0.0; SM-G965F Build/R16NW) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.109 Mobile Safari/537.36";
+    });
+
+    const result = isMobile();
+    expect(result).toBe(true);
+  });
+
+  it('returns false if userAgent is desktop', () => {
+    navigator.__defineGetter__('userAgent', function(){
+      return "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36";
+    });
+
+    const result = isMobile();
+    expect(result).toBe(false);
+  })
 });
