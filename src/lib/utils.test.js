@@ -53,7 +53,7 @@ describe('buildShareUrl', () => {
     });
 
     it('returns a proper Yahoo share URL when duration is a number', () => {
-      expect result = buildShareUrl({...testEvent, duration: 2}, SHARE_SITES.YAHOO);
+      const result = buildShareUrl({...testEvent, duration: 2}, SHARE_SITES.YAHOO);
       expect(result).toEqual(expectedOutputs.yahoo);
     });
   });
