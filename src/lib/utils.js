@@ -9,6 +9,16 @@ import { SHARE_SITES } from './enums';
  */
 export const formatDate = date => date && date.replace('+00:00', 'Z');
 
+export const formatDuration = duration => {
+  if (typeof duration === 'string') return duration;
+  const parts = duration.toString().split('.');
+  if (parts.length < 2) {
+    parts.push('00');
+  }
+
+  return parts.map(part => part.length === 2 ? part : `0${part}`).join('');
+};
+
 /**
  * Tests provided UserAgent against Known Mobile User Agents
  * @returns {bool} isMobileDevice
@@ -40,7 +50,7 @@ const googleShareUrl = ({
 }) =>
   `https://calendar.google.com/calendar/render?action=TEMPLATE&dates=${
     startDatetime
-  }/${endDatetime}&ctz=${timezone}&location=${location}&text=${title}&details=${description}`;
+  }/${endDatetime}${timezone && `&ctz=${timezone}`}&location=${location}&text=${title}&details=${description}`;
 
 /**
  * Takes an event object and returns a Yahoo Calendar Event URL
@@ -119,7 +129,7 @@ export const buildShareUrl = (
 
   const data = {
     description: encodeURI ? encodeURIComponent(description) : description,
-    duration,
+    duration: formatDuration(duration),
     endDatetime: formatDate(endDatetime),
     location: encodeURI ? encodeURIComponent(location) : location,
     startDatetime: formatDate(startDatetime),
