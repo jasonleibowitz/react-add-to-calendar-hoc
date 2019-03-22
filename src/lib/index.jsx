@@ -8,7 +8,7 @@ export default function AddToCalendar(WrappedButton, WrappedDropdown) {
   return class AddToCalendarWrapped extends Component {
     static propTypes = {
       buttonProps: PropTypes.shape(),
-      buttonText: PropTypes.string,
+      buttonText: PropTypes.node,
       className: PropTypes.string,
       dropdownProps: PropTypes.shape(),
       event: PropTypes.shape({
