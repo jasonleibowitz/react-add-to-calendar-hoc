@@ -288,7 +288,7 @@ function Demo() {
       <CodeSnippet>
       {`
   const AddToCalendarModal = AddToCalendarHOC(Button, CalendarModal);
-  const startTime = DateTime.fromObject({ year: 2018, month: 10, day, 25, hour: 12 });
+  const startTime = DateTime.fromObject({ year: 2018, month: 10, day: 25, hour: 12 });
   const endTime = startTime.plus({ hours: 2 });
   const duration = endDatetime.diff(startDatetime).as('hours');
   const eventInDifferentTimezone = {
