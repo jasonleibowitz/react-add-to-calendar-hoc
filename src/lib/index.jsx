@@ -19,7 +19,11 @@ export default function AddToCalendar(WrappedButton, WrappedDropdown) {
         startDatetime: PropTypes.string.isRequired,
         title: PropTypes.string,
       }).isRequired,
-      items: PropTypes.arrayOf(PropTypes.oneOf(Object.values(SHARE_SITES))),
+      items: PropTypes.arrayOf(
+        PropTypes.oneOf(
+          Object.keys(SHARE_SITES).map(itm => SHARE_SITES[itm])
+        )
+      ),
       linkProps: PropTypes.shape(),
     };
 
@@ -28,7 +32,7 @@ export default function AddToCalendar(WrappedButton, WrappedDropdown) {
       buttonText: 'Add to Calendar',
       className: null,
       dropdownProps: {},
-      items: Object.values(SHARE_SITES),
+      items: Object.keys(SHARE_SITES).map(itm => SHARE_SITES[itm]),
       linkProps: {},
     };
 
