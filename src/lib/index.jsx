@@ -4,7 +4,7 @@ import { SHARE_SITES } from './enums';
 import { buildShareUrl, isInternetExplorer } from './utils';
 
 export { SHARE_SITES };
-export default function AddToCalendar (WrappedButton, WrappedDropdown) {
+export default function AddToCalendar(WrappedButton, WrappedDropdown) {
   return class AddToCalendarWrapped extends Component {
     static propTypes = {
       buttonProps: PropTypes.shape(),
@@ -13,10 +13,7 @@ export default function AddToCalendar (WrappedButton, WrappedDropdown) {
       dropdownProps: PropTypes.shape(),
       event: PropTypes.shape({
         description: PropTypes.string,
-        duration: PropTypes.oneOfType([
-          PropTypes.number,
-          PropTypes.string,
-        ]).isRequired,
+        duration: PropTypes.string.isRequired,
         endDatetime: PropTypes.string.isRequired,
         location: PropTypes.string,
         startDatetime: PropTypes.string.isRequired,
@@ -70,7 +67,7 @@ export default function AddToCalendar (WrappedButton, WrappedDropdown) {
       this.setState(prevState => ({ dropdownOpen: !prevState.dropdownOpen }));
     };
 
-    render () {
+    render() {
       const { buttonProps, buttonText, className, dropdownProps, event, items, linkProps } = this.props;
 
       return (
@@ -82,23 +79,23 @@ export default function AddToCalendar (WrappedButton, WrappedDropdown) {
             {buttonText}
           </WrappedButton>
           {this.state.dropdownOpen && (
-            <WrappedDropdown
-              {...dropdownProps}
-              isOpen={this.state.dropdownOpen}
-              onRequestClose={this.handleDropdownToggle}
-            >
-              {items.map(item => (
-                <a
-                  {...linkProps}
-                  key={item}
-                  onClick={this.handleCalendarButtonClick}
-                  href={buildShareUrl(event, item)}
-                >
-                  {item}
-                </a>
-              ))}
-            </WrappedDropdown>
-          )}
+              <WrappedDropdown
+                {...dropdownProps}
+                isOpen={this.state.dropdownOpen}
+                onRequestClose={this.handleDropdownToggle}
+              >
+                {items.map(item => (
+                  <a
+                    {...linkProps}
+                    key={item}
+                    onClick={this.handleCalendarButtonClick}
+                    href={buildShareUrl(event, item)}
+                  >
+                    {item}
+                  </a>
+                ))}
+              </WrappedDropdown>
+            )}
         </div>
       );
     }
