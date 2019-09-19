@@ -122,7 +122,6 @@ function Demo() {
     location: 'NYC',
     startDatetime: startDatetime.format('YYYYMMDDTHHmmssZ'),
     title: 'Super Fun Event',
-    filename: 'superfun'
   }
           `}
         </CodeSnippet>

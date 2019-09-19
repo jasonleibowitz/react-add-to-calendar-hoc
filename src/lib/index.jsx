@@ -18,11 +18,11 @@ export default function AddToCalendar(WrappedButton, WrappedDropdown) {
           PropTypes.string,
         ]).isRequired,
         endDatetime: PropTypes.string.isRequired,
-        filename: PropTypes.string,
         location: PropTypes.string,
         startDatetime: PropTypes.string.isRequired,
         title: PropTypes.string,
       }).isRequired,
+      filename: PropTypes.string,
       items: PropTypes.arrayOf(
         PropTypes.oneOf(
           Object.keys(SHARE_SITES).map(itm => SHARE_SITES[itm])
@@ -36,6 +36,7 @@ export default function AddToCalendar(WrappedButton, WrappedDropdown) {
       buttonText: 'Add to Calendar',
       className: null,
       dropdownProps: {},
+      filename: 'download',
       items: Object.keys(SHARE_SITES).map(itm => SHARE_SITES[itm]),
       linkProps: {},
     };
@@ -45,18 +46,18 @@ export default function AddToCalendar(WrappedButton, WrappedDropdown) {
     };
 
     handleCalendarButtonClick = e => {
-      const { event: { filename } = {} } = this.props;
+      const { filename } = this.props;
       e.preventDefault();
       const url = e.currentTarget.getAttribute('href');
       if (url.startsWith('BEGIN')) {
         const blob = new Blob([url], { type: 'text/calendar;charset=utf-8' });
 
         if (isInternetExplorer()) {
-          window.navigator.msSaveOrOpenBlob(blob, `${filename || 'download'}.ics`);
+          window.navigator.msSaveOrOpenBlob(blob, `${filename}.ics`);
         } else {
           const link = document.createElement('a');
           link.href = window.URL.createObjectURL(blob);
-          link.setAttribute('download', `${filename || 'download'}.ics`);
+          link.setAttribute('download', `${filename}.ics`);
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);
