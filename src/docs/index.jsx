@@ -217,6 +217,30 @@ function Demo() {
       `}
       </CodeSnippet>
 
+      <h2 className={subTitleStyles}>Custom Download Filename</h2>
+      <AddToCalendarModal
+        className={componentStyles}
+        linkProps={{
+          className: linkStyles,
+        }}
+        event={event}
+        filename="SuperFunEvent"
+      />
+      <CodeSnippet>
+      {`
+  const AddToCalendarModal = AddToCalendarHOC(Button, CalendarModal);
+  ...
+  <AddToCalendarModal
+    className={componentStyles}
+    linkProps={{
+      className: linkStyles,
+    }}
+    event={event}
+    filename="SuperFunEvent"
+  />
+      `}
+      </CodeSnippet>
+
       <h2 className={subTitleStyles}>Handle iPhone Options</h2>
       <p className={paragraphStyles}>iPhones don't allow users to select which app they want to open ics files with, so there is no reason to offer both iCal and Outlook options for users on iOS devices. This example shows how to conditionally change which items to display based on the user's device.</p>
       <AddToCalendarModal
