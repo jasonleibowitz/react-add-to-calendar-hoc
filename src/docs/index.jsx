@@ -77,7 +77,6 @@ const event = {
   location: 'NYC',
   startDatetime: startDatetime.format('YYYYMMDDTHHmmssZ'),
   title: 'Super Fun Event',
-  filename: 'superfun'
 }
 
 const eventInDifferentTimezone = {
@@ -214,6 +213,30 @@ function Demo() {
     }}
     event={event}
     items={[SHARE_SITES.GOOGLE, SHARE_SITES.ICAL]}
+  />
+      `}
+      </CodeSnippet>
+
+      <h2 className={subTitleStyles}>Custom Download Filename</h2>
+      <AddToCalendarModal
+        className={componentStyles}
+        linkProps={{
+          className: linkStyles,
+        }}
+        event={event}
+        filename="SuperFunEvent"
+      />
+      <CodeSnippet>
+      {`
+  const AddToCalendarModal = AddToCalendarHOC(Button, CalendarModal);
+  ...
+  <AddToCalendarModal
+    className={componentStyles}
+    linkProps={{
+      className: linkStyles,
+    }}
+    event={event}
+    filename="SuperFunEvent"
   />
       `}
       </CodeSnippet>
