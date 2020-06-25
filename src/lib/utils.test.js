@@ -1,6 +1,15 @@
 import moment from 'moment';
-import { SHARE_SITES } from './enums';
-import { buildShareUrl, formatDate, formatDuration, isInternetExplorer, isMobile } from './utils';
+import {
+  SHARE_SITES
+} from './enums';
+import {
+  buildShareUrl,
+  formatDate,
+  formatDuration,
+  isInternetExplorer,
+  isMobile,
+  escapeICSDescription
+} from './utils';
 
 const testEvent = {
   description: 'Description of event. Going to have a lot of fun doing things that we scheduled ahead of time.',
@@ -14,8 +23,8 @@ const testEvent = {
 const expectedOutputs = {
   google: 'https://calendar.google.com/calendar/render?action=TEMPLATE&dates=20150126T000000Z/20150126T020000Z&location=NYC&text=Super%20Fun%20Event&details=Description%20of%20event.%20Going%20to%20have%20a%20lot%20of%20fun%20doing%20things%20that%20we%20scheduled%20ahead%20of%20time.',
   yahoo: 'https://calendar.yahoo.com/?v=60&view=d&type=20&title=Super%20Fun%20Event&st=20150126T000000Z&dur=0200&desc=Description%20of%20event.%20Going%20to%20have%20a%20lot%20of%20fun%20doing%20things%20that%20we%20scheduled%20ahead%20of%20time.&in_loc=NYC',
-  ics: 'BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nURL:about:blank\nMETHOD:PUBLISH\nDTSTART:20150126T000000Z\nDTEND:20150126T020000Z\nSUMMARY:Super Fun Event\nDESCRIPTION:Description of event. Going to have a lot of fun doing things that we scheduled ahead of time.\nLOCATION:NYC\nEND:VEVENT\nEND:VCALENDAR',
-  icsMobile: 'data:text/calendar;charset=utf8,BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nURL:about:blank\nMETHOD:PUBLISH\nDTSTART:20150126T000000Z\nDTEND:20150126T020000Z\nSUMMARY:Super Fun Event\nDESCRIPTION:Description of event. Going to have a lot of fun doing things that we scheduled ahead of time.\nLOCATION:NYC\nEND:VEVENT\nEND:VCALENDAR',
+  ics: 'BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nURL:http://localhost/\nMETHOD:PUBLISH\nDTSTART:20150126T000000Z\nDTEND:20150126T020000Z\nSUMMARY:Super Fun Event\nDESCRIPTION:Description of event. Going to have a lot of fun doing things that we scheduled ahead of time.\nLOCATION:NYC\nEND:VEVENT\nEND:VCALENDAR',
+  icsMobile: 'data:text/calendar;charset=utf8,BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nURL:http://localhost/\nMETHOD:PUBLISH\nDTSTART:20150126T000000Z\nDTEND:20150126T020000Z\nSUMMARY:Super Fun Event\nDESCRIPTION:Description of event. Going to have a lot of fun doing things that we scheduled ahead of time.\nLOCATION:NYC\nEND:VEVENT\nEND:VCALENDAR',
 }
 
 describe('formatDate', () => {
@@ -25,7 +34,7 @@ describe('formatDate', () => {
 });
 
 describe('formatDuration', () => {
-  it ('converts number 2 to string 0200', () => {
+  it('converts number 2 to string 0200', () => {
     expect(formatDuration(2)).toEqual('0200');
   });
 
@@ -53,7 +62,10 @@ describe('buildShareUrl', () => {
     });
 
     it('returns a proper Yahoo share URL when duration is a number', () => {
-      const result = buildShareUrl({...testEvent, duration: 2}, SHARE_SITES.YAHOO);
+      const result = buildShareUrl({
+        ...testEvent,
+        duration: 2
+      }, SHARE_SITES.YAHOO);
       expect(result).toEqual(expectedOutputs.yahoo);
     });
   });
@@ -66,7 +78,7 @@ describe('buildShareUrl', () => {
     });
 
     it('prepends a data URL when userAgent is mobile', () => {
-      navigator.__defineGetter__('userAgent', function(){
+      navigator.__defineGetter__('userAgent', function () {
         return "Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1";
       });
 
@@ -78,7 +90,7 @@ describe('buildShareUrl', () => {
 
 describe('isInternetExplorer', () => {
   it('returns true is userAgent is IE 11', () => {
-    navigator.__defineGetter__('userAgent', function(){
+    navigator.__defineGetter__('userAgent', function () {
       return "Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; .NET4.0C; .NET4.0E; .NET CLR 2.0.50727; .NET CLR 3.0.30729; .NET CLR 3.5.30729; rv:11.0) like Gecko";
     });
 
@@ -87,7 +99,7 @@ describe('isInternetExplorer', () => {
   });
 
   it('returns true is userAgent is IE 10', () => {
-    navigator.__defineGetter__('userAgent', function(){
+    navigator.__defineGetter__('userAgent', function () {
       return "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; WOW64; Trident/6.0; .NET4.0E; .NET4.0C; .NET CLR 3.5.30729; .NET CLR 2.0.50727; .NET CLR 3.0.30729)";
     });
 
@@ -96,7 +108,7 @@ describe('isInternetExplorer', () => {
   });
 
   it('returns true is userAgent is IE 9', () => {
-    navigator.__defineGetter__('userAgent', function(){
+    navigator.__defineGetter__('userAgent', function () {
       return "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; .NET4.0C; .NET4.0E)";
     });
 
@@ -105,7 +117,7 @@ describe('isInternetExplorer', () => {
   });
 
   it('returns false is userAgent is MS Edge', () => {
-    navigator.__defineGetter__('userAgent', function(){
+    navigator.__defineGetter__('userAgent', function () {
       return "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36";
     });
 
@@ -114,7 +126,7 @@ describe('isInternetExplorer', () => {
   });
 
   it('returns false is userAgent is not IE', () => {
-    navigator.__defineGetter__('userAgent', function(){
+    navigator.__defineGetter__('userAgent', function () {
       return "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36";
     });
 
@@ -125,7 +137,7 @@ describe('isInternetExplorer', () => {
 
 describe('isMobile', () => {
   it('returns true if userAgent is iPhone', () => {
-    navigator.__defineGetter__('userAgent', function(){
+    navigator.__defineGetter__('userAgent', function () {
       return "Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1";
     });
 
@@ -134,7 +146,7 @@ describe('isMobile', () => {
   });
 
   it('returns true if userAgent is Android', () => {
-    navigator.__defineGetter__('userAgent', function(){
+    navigator.__defineGetter__('userAgent', function () {
       return "Mozilla/5.0 (Linux; Android 8.0.0; SM-G965F Build/R16NW) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.109 Mobile Safari/537.36";
     });
 
@@ -143,11 +155,25 @@ describe('isMobile', () => {
   });
 
   it('returns false if userAgent is desktop', () => {
-    navigator.__defineGetter__('userAgent', function(){
+    navigator.__defineGetter__('userAgent', function () {
       return "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36";
     });
 
     const result = isMobile();
     expect(result).toBe(false);
   })
+});
+
+describe('escapeICSDescription', () => {
+  it('replaces carriage returns with newline characters', () => {
+    const result = escapeICSDescription('Line One \r\nLine Two');
+    expect(result).toEqual('Line One \\nLine Two');
+  });
+
+  it('replaces <br> characters with newline characters', () => {
+    const expectedResult = 'Line One \\nLineTwo';
+    expect(escapeICSDescription('Line One <br>LineTwo')).toEqual(expectedResult);
+    expect(escapeICSDescription('Line One <br />LineTwo')).toEqual(expectedResult);
+    expect(escapeICSDescription('Line One <br >LineTwo')).toEqual(expectedResult);
+  });
 });

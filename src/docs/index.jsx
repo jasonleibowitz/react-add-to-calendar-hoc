@@ -147,6 +147,31 @@ function Demo() {
       `}
       </CodeSnippet>
 
+      <h2 className={subTitleStyles}>Dropdown Example - Handle Newlines in Description</h2>
+      <AddToCalendarDropdown
+        className={componentStyles}
+        linkProps={{
+          className: linkStyles,
+        }}
+        event={{
+          ...event,
+          description: 'Description of event. <br>Going to have a lot of fun doing things that we scheduled ahead of time.'
+        }}
+      />
+      <CodeSnippet>
+        {`
+  const AddToCalendarDropdown = AddToCalendarHOC(Button, Dropdown);
+  ...
+  <AddToCalendarDropdown
+    className={componentStyles}
+    linkProps={{
+      className: linkStyles,
+    }}
+    event={event}
+  />
+      `}
+      </CodeSnippet>
+
       <h2 className={subTitleStyles}>Modal Example</h2>
       <AddToCalendarModal
         className={componentStyles}
@@ -299,7 +324,7 @@ function Demo() {
       `}
       </CodeSnippet>
 
-          <h2 className={subTitleStyles}>Use Moment Alternative</h2>
+    <h2 className={subTitleStyles}>Use Moment Alternative</h2>
       <p className={paragraphStyles}>Moment is known to be a MASSIVE library. v2.22.2 is 64.2kb minified + gzipped and moment-timezone v0.5.21 is 89.8kb minified + gzipped. There are plenty of other date time libraries for JS that are way smaller. Using one of these helps you avoid overly bloating your application and sending too many vendor files to the client. One great option is Luxon. Luxon v.1.4.4 is 16.9kb minified + gzipped.</p>
       <p className={paragraphStyles}>This example shows how to use the Luxon library (instead of Moment) to construct <span className={highlightText}>startDatetime</span> and <span className={highlightText}>endDatetime</span></p>
       <AddToCalendarModal

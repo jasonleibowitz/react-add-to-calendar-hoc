@@ -1,4 +1,6 @@
-import { SHARE_SITES } from './enums';
+import {
+  SHARE_SITES
+} from './enums';
 
 
 /**
@@ -31,6 +33,8 @@ export const isMobile = () => /Mobile|iP(hone|od|ad)|Android|BlackBerry|IEMobile
  */
 export const isInternetExplorer = () => /MSIE/.test(window.navigator.userAgent) || /Trident/.test(window.navigator.userAgent);
 
+export const escapeICSDescription = description => description.replace(/(\r?\n|<br ?\/?>)/g, '\\n');
+
 /**
  * Takes an event object and returns a Google Calendar Event URL
  * @param {string} event.description
@@ -41,13 +45,13 @@ export const isInternetExplorer = () => /MSIE/.test(window.navigator.userAgent) 
  * @returns {string} Google Calendar Event URL
  */
 const googleShareUrl = ({
-  description,
-  endDatetime,
-  location,
-  startDatetime,
-  timezone,
-  title,
-}) =>
+    description,
+    endDatetime,
+    location,
+    startDatetime,
+    timezone,
+    title,
+  }) =>
   `https://calendar.google.com/calendar/render?action=TEMPLATE&dates=${
     startDatetime
   }/${endDatetime}${timezone && `&ctz=${timezone}`}&location=${location}&text=${title}&details=${description}`;
@@ -62,12 +66,12 @@ const googleShareUrl = ({
  * @returns {string} Yahoo Calendar Event URL
  */
 const yahooShareUrl = ({
-  description,
-  duration,
-  location,
-  startDatetime,
-  title,
-}) =>
+    description,
+    duration,
+    location,
+    startDatetime,
+    title,
+  }) =>
   `https://calendar.yahoo.com/?v=60&view=d&type=20&title=${title}&st=${
     startDatetime
   }&dur=${duration}&desc=${description}&in_loc=${location}`;
@@ -101,7 +105,7 @@ const buildShareFile = ({
     timezone === '' ? `DTSTART:${startDatetime}` : `DTSTART;TZID=${timezone}:${startDatetime}`,
     timezone === '' ? `DTEND:${endDatetime}` : `DTEND;TZID=${timezone}:${endDatetime}`,
     `SUMMARY:${title}`,
-    `DESCRIPTION:${description}`,
+    `DESCRIPTION:${escapeICSDescription(description)}`,
     `LOCATION:${location}`,
     'END:VEVENT',
     'END:VCALENDAR',
@@ -121,8 +125,15 @@ const buildShareFile = ({
  * @param {string} event.title
  * @param {enum} type One of SHARE_SITES from ./enums
  */
-export const buildShareUrl = (
-  { description = '', duration, endDatetime, location = '', startDatetime, timezone = '', title = '' },
+export const buildShareUrl = ({
+    description = '',
+    duration,
+    endDatetime,
+    location = '',
+    startDatetime,
+    timezone = '',
+    title = ''
+  },
   type,
 ) => {
   const encodeURI = type !== SHARE_SITES.ICAL && type !== SHARE_SITES.OUTLOOK;
