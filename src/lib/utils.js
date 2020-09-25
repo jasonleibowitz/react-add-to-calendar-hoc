@@ -83,6 +83,7 @@ const yahooShareUrl = ({
  * @param {string} event.location
  * @param {string} event.startDatetime
  * @param {string} event.title
+ * @param {string} event.reminder
  * @returns {array} ICS Content
  */
 const buildShareFile = ({
@@ -93,6 +94,7 @@ const buildShareFile = ({
   startDatetime,
   timezone = '',
   title = '',
+  reminder = ''
 }) => {
   let content = [
     'BEGIN:VCALENDAR',
@@ -107,7 +109,7 @@ const buildShareFile = ({
     `SUMMARY:${title}`,
     `DESCRIPTION:${escapeICSDescription(description)}`,
     `LOCATION:${location}`,
-    'END:VEVENT',
+    reminder === '' ? 'END:VEVENT' : `BEGIN:VALARM\nTRIGGER:-PT${reminder}\nACTION:DISPLAY\nEND:VALARM\nEND:VEVENT`,
     'END:VCALENDAR',
   ].join('\n');
 
@@ -123,6 +125,7 @@ const buildShareFile = ({
  * @param {string} event.location
  * @param {string} event.startDatetime
  * @param {string} event.title
+ * @param {string} event.reminder
  * @param {enum} type One of SHARE_SITES from ./enums
  */
 export const buildShareUrl = ({
@@ -132,7 +135,8 @@ export const buildShareUrl = ({
     location = '',
     startDatetime,
     timezone = '',
-    title = ''
+    title = '',
+    reminder = ''
   },
   type,
 ) => {
@@ -146,6 +150,7 @@ export const buildShareUrl = ({
     startDatetime: formatDate(startDatetime),
     timezone,
     title: encodeURI ? encodeURIComponent(title) : title,
+    reminder,
   };
 
   switch (type) {
