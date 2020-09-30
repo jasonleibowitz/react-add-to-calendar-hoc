@@ -1,3 +1,4 @@
+import moment from 'moment-timezone';
 import {
   SHARE_SITES
 } from './enums';

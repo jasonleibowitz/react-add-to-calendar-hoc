@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "core-js": "^2.5.7",
+    "moment-timezone": "^0.5.21",
     "prop-types": "^15.6.2"
   },
   "devDependencies": {
@@ -40,8 +41,6 @@
     "html-webpack-plugin": "^3.2.0",
     "jest": "^23.1.0",
     "luxon": "^1.4.4",
-    "moment": "^2.29.0",
-    "moment-timezone": "^0.5.21",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "react-highlight": "^0.12.0",
