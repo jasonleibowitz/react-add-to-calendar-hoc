@@ -95,7 +95,7 @@ const buildShareFile = ({
   timezone = '',
   title = '',
 }) => {
-  let VTIMEZONEEntries = getVtimezoneFromMomentZone(timezone)
+  let VTIMEZONEEntries = getVtimezoneFromMomentZone({ timezone, startDatetime, endDatetime });
 
   let content = [
     'BEGIN:VCALENDAR',
@@ -120,26 +120,37 @@ const buildShareFile = ({
 
 /**
  * Takes a timezone and returns VTIMEZONE entries
- * @param {string} tzName
- * @param {number} MAX_OCCURENCES
+ * @param {string} event.timezone
+ * @param {string} event.endDatetime
+ * @param {string} event.startDatetime
  */
-const getVtimezoneFromMomentZone = (tzName = '', MAX_OCCURENCES = 2) => {
-  if (tzName === '') return [];
+const getVtimezoneFromMomentZone = ({
+  timezone = "",
+  startDatetime,
+  endDatetime,
+}) => {
+  if (timezone === "") return [];
 
-  const zone = moment.tz.zone(tzName);
-  const header = `BEGIN:VTIMEZONE\nTZID:${tzName}`;
-  const footer = 'END:VTIMEZONE';
+  const zone = moment.tz.zone(timezone);
+  const header = `BEGIN:VTIMEZONE\nTZID:${timezone}`;
+  const footer = "END:VTIMEZONE";
 
-  const nMaxLoops = Math.min(MAX_OCCURENCES, zone.untils.length - 1);
+  const nextDSTSwitch = zone.untils.findIndex(
+    (u) => u > moment(startDatetime).unix() * 1000
+  );
+  const lastDSTSwitch = zone.untils.findIndex(
+    (u) => u > moment(endDatetime).unix() * 1000
+  );
+  const DSTSwitches = zone.untils.slice(nextDSTSwitch - 1, lastDSTSwitch + 1);
 
-  const zTZitems = zone.untils.slice(0, nMaxLoops).map((until, i) => {
-    const type = i % 2 === 0 ? 'STANDARD' : 'DAYLIGHT';
-    const momDtStart = moment.tz(until, tzName);
-    const momNext = moment.tz(zone.untils[i + 1], tzName);
+  const zTZitems = DSTSwitches.map((until, i) => {
+    const type = i % 2 === 0 ? "STANDARD" : "DAYLIGHT";
+    const momDtStart = moment.tz(until, timezone);
+    const momNext = moment.tz(zone.untils[i + 1], timezone);
     return `BEGIN:${type}
-DTSTART:${momDtStart.format('YYYYMMDDTHHmmss')}
-TZOFFSETFROM:${momDtStart.format('ZZ')}
-TZOFFSETTO:${momNext.format('ZZ')}
+DTSTART:${momDtStart.format("YYYYMMDDTHHmmss")}
+TZOFFSETFROM:${momDtStart.format("ZZ")}
+TZOFFSETTO:${momNext.format("ZZ")}
 TZNAME:${zone.abbrs[i]}
 END:${type}`;
   });
