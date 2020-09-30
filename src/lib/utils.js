@@ -94,9 +94,12 @@ const buildShareFile = ({
   timezone = '',
   title = '',
 }) => {
+  let VTIMEZONEEntries = getVtimezoneFromMomentZone(timezone)
+
   let content = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
+    ...VTIMEZONEEntries,
     'BEGIN:VEVENT',
     `URL:${document.URL}`,
     'METHOD:PUBLISH',
@@ -113,6 +116,35 @@ const buildShareFile = ({
 
   return isMobile() ? encodeURI(`data:text/calendar;charset=utf8,${content}`) : content;
 }
+
+/**
+ * Takes a timezone and returns VTIMEZONE entries
+ * @param {string} tzName
+ * @param {number} MAX_OCCURENCES
+ */
+const getVtimezoneFromMomentZone = (tzName = '', MAX_OCCURENCES = 2) => {
+  if (tzName === '') return [];
+
+  const zone = moment.tz.zone(tzName);
+  const header = `BEGIN:VTIMEZONE\nTZID:${tzName}`;
+  const footer = 'END:VTIMEZONE';
+
+  const nMaxLoops = Math.min(MAX_OCCURENCES, zone.untils.length - 1);
+
+  const zTZitems = zone.untils.slice(0, nMaxLoops).map((until, i) => {
+    const type = i % 2 === 0 ? 'STANDARD' : 'DAYLIGHT';
+    const momDtStart = moment.tz(until, tzName);
+    const momNext = moment.tz(zone.untils[i + 1], tzName);
+    return `BEGIN:${type}
+DTSTART:${momDtStart.format('YYYYMMDDTHHmmss')}
+TZOFFSETFROM:${momDtStart.format('ZZ')}
+TZOFFSETTO:${momNext.format('ZZ')}
+TZNAME:${zone.abbrs[i]}
+END:${type}`;
+  });
+
+  return [header, ...zTZitems, footer];
+};
 
 /**
  * Takes an event object and a type of URL and returns either a calendar event
