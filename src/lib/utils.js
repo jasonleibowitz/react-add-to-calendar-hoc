@@ -119,10 +119,13 @@ const buildShareFile = ({
 }
 
 /**
- * Takes a timezone and returns VTIMEZONE entries
+ * Takes a timezone, start and end date and returns VTIMEZONE entries
+ * corresponding to DST changes during and around the event. N.B. This
+ * is suboptimal for long-spanning or recurring events. For those cases
+ * recurrence rules should be applied.
  * @param {string} event.timezone
- * @param {string} event.endDatetime
  * @param {string} event.startDatetime
+ * @param {string} event.endDatetime
  */
 const getVtimezoneFromMomentZone = ({
   timezone = "",
@@ -135,25 +138,29 @@ const getVtimezoneFromMomentZone = ({
   const header = `BEGIN:VTIMEZONE\nTZID:${timezone}`;
   const footer = "END:VTIMEZONE";
 
-  const nextDSTSwitch = zone.untils.findIndex(
-    (u) => u > moment(startDatetime).unix() * 1000
-  );
+  // Find the timestamp for DST changes immediately before
+  // and after the event.
+  const prevDSTSwitch =
+    zone.untils.findIndex((u) => u > moment(startDatetime).unix() * 1000) - 1;
   const lastDSTSwitch = zone.untils.findIndex(
     (u) => u > moment(endDatetime).unix() * 1000
   );
-  const DSTSwitches = zone.untils.slice(nextDSTSwitch - 1, lastDSTSwitch + 1);
 
-  const zTZitems = DSTSwitches.map((until, i) => {
-    const type = i % 2 === 0 ? "STANDARD" : "DAYLIGHT";
-    const momDtStart = moment.tz(until, timezone);
-    const momNext = moment.tz(zone.untils[i + 1], timezone);
-    return `BEGIN:${type}
+  const zTZitems = [];
+  // Generate VTIMEZONE entries
+  // FIXME: Handle case when lastDSTSwitch does not exist, or is the last entry
+  for (let i = prevDSTSwitch; i < lastDSTSwitch + 1; i++) {
+    // Determine which mode is ENDING. Even entries are DST, odd entries are standard.
+    const type = i % 2 ? "STANDARD" : "DAYLIGHT";
+    const momDtStart = moment.tz(zone.untils[i - 1], timezone);
+    const momNext = moment.tz(zone.untils[i], timezone);
+    zTZitems.push(`BEGIN:${type}
 DTSTART:${momDtStart.format("YYYYMMDDTHHmmss")}
 TZOFFSETFROM:${momDtStart.format("ZZ")}
 TZOFFSETTO:${momNext.format("ZZ")}
 TZNAME:${zone.abbrs[i]}
-END:${type}`;
-  });
+END:${type}`);
+  }
 
   return [header, ...zTZitems, footer];
 };
