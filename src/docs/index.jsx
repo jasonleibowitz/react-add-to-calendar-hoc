@@ -229,6 +229,8 @@ function Demo() {
       />
       <CodeSnippet>
       {`
+  import AddToCalendarHOC, { SHARE_SITES } from 'react-add-to-calendar-hoc';
+      
   const AddToCalendarModal = AddToCalendarHOC(Button, CalendarModal);
   ...
   <AddToCalendarModal
