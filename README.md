@@ -66,6 +66,7 @@ All of these properties are required.
 | startDatetime | string           | Start date time of event. Must be formatted in `YYYYMMDDTHHmmssZ` format or `YYYYMMDDTHHmmss` if timezone is also provided. Use any date lib you want, but the format must match this.   |
 | timezone      | string           | Valid TZ env variable. See list of [valid options here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).                                                                   |
 | title         | string           | Name of your event.                                                                                                                                                                      |
+| recurring     | string           | Raw recurring rule (RRULE) to allow various types of repeat events. (Dedicated RRULE generation libraries are available.)                                                                |
 
 #### Helper functions
 

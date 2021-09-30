@@ -42,6 +42,7 @@ export const escapeICSDescription = description => description.replace(/(\r?\n|<
  * @param {string} event.location
  * @param {string} event.startDatetime
  * @param {string} event.title
+ * @param {string} event.recurring
  * @returns {string} Google Calendar Event URL
  */
 const googleShareUrl = ({
@@ -51,10 +52,11 @@ const googleShareUrl = ({
     startDatetime,
     timezone,
     title,
+    recurring,
   }) =>
   `https://calendar.google.com/calendar/render?action=TEMPLATE&dates=${
     startDatetime
-  }/${endDatetime}${timezone && `&ctz=${timezone}`}&location=${location}&text=${title}&details=${description}`;
+  }/${endDatetime}${timezone && `&ctz=${timezone}`}&location=${location}&text=${title}&details=${description}&recur=RRULE:${recurring}`;
 
 /**
  * Takes an event object and returns a Yahoo Calendar Event URL
@@ -63,6 +65,7 @@ const googleShareUrl = ({
  * @param {string} event.location
  * @param {string} event.startDatetime
  * @param {string} event.title
+ * @param {string} event.recurring
  * @returns {string} Yahoo Calendar Event URL
  */
 const yahooShareUrl = ({
@@ -71,10 +74,11 @@ const yahooShareUrl = ({
     location,
     startDatetime,
     title,
+    recurring,
   }) =>
   `https://calendar.yahoo.com/?v=60&view=d&type=20&title=${title}&st=${
     startDatetime
-  }&dur=${duration}&desc=${description}&in_loc=${location}`;
+  }&dur=${duration}&desc=${description}&in_loc=${location}&recur=RRULE:${recurring}`;
 
 /**
  * Takes an event object and returns an array to be downloaded as ics file
@@ -83,6 +87,7 @@ const yahooShareUrl = ({
  * @param {string} event.location
  * @param {string} event.startDatetime
  * @param {string} event.title
+ * @param {string} event.recurring
  * @returns {array} ICS Content
  */
 const buildShareFile = ({
@@ -93,6 +98,7 @@ const buildShareFile = ({
   startDatetime,
   timezone = '',
   title = '',
+  recurring,
 }) => {
   let content = [
     'BEGIN:VCALENDAR',
@@ -107,6 +113,7 @@ const buildShareFile = ({
     `SUMMARY:${title}`,
     `DESCRIPTION:${escapeICSDescription(description)}`,
     `LOCATION:${location}`,
+    `RRULE:${recurring}`,
     'END:VEVENT',
     'END:VCALENDAR',
   ].join('\n');
@@ -123,6 +130,7 @@ const buildShareFile = ({
  * @param {string} event.location
  * @param {string} event.startDatetime
  * @param {string} event.title
+ * @param {string} event.recurring
  * @param {enum} type One of SHARE_SITES from ./enums
  */
 export const buildShareUrl = ({
@@ -132,7 +140,8 @@ export const buildShareUrl = ({
     location = '',
     startDatetime,
     timezone = '',
-    title = ''
+    title = '',
+    recurring = ''
   },
   type,
 ) => {
@@ -146,6 +155,7 @@ export const buildShareUrl = ({
     startDatetime: formatDate(startDatetime),
     timezone,
     title: encodeURI ? encodeURIComponent(title) : title,
+    recurring: recurring,
   };
 
   switch (type) {
