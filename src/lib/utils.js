@@ -56,7 +56,7 @@ const googleShareUrl = ({
   }) =>
   `https://calendar.google.com/calendar/render?action=TEMPLATE&dates=${
     startDatetime
-  }/${endDatetime}${timezone && `&ctz=${timezone}`}&location=${location}&text=${title}&details=${description}&=RRULE=${recurring}`;
+  }/${endDatetime}${timezone && `&ctz=${timezone}`}&location=${location}&text=${title}&details=${description}&recur=RRULE:${recurring}`;
 
 /**
  * Takes an event object and returns a Yahoo Calendar Event URL
@@ -78,7 +78,7 @@ const yahooShareUrl = ({
   }) =>
   `https://calendar.yahoo.com/?v=60&view=d&type=20&title=${title}&st=${
     startDatetime
-  }&dur=${duration}&desc=${description}&in_loc=${location}&=RRULE=${recurring}`;
+  }&dur=${duration}&desc=${description}&in_loc=${location}&recur=RRULE:${recurring}`;
 
 /**
  * Takes an event object and returns an array to be downloaded as ics file
