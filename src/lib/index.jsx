@@ -21,6 +21,7 @@ export default function AddToCalendar(WrappedButton, WrappedDropdown) {
         location: PropTypes.string,
         startDatetime: PropTypes.string.isRequired,
         title: PropTypes.string,
+        recurring: PropTypes.string,
       }).isRequired,
       filename: PropTypes.string,
       items: PropTypes.arrayOf(
