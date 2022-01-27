@@ -108,6 +108,7 @@ const buildShareFile = ({
     timezone === '' ? `DTEND:${endDatetime}` : `DTEND;TZID=${timezone}:${endDatetime}`,
     `SUMMARY:${title}`,
     `DESCRIPTION:${escapeICSDescription(description)}`,
+    `X-ALT-DESC;FMTTYPE=text/html:${escapeICSDescription(description)}`,
     `LOCATION:${location}`,
     reminder === '' ? 'END:VEVENT' : `BEGIN:VALARM\nTRIGGER:-PT${reminder}\nACTION:DISPLAY\nEND:VALARM\nEND:VEVENT`,
     'END:VCALENDAR',
