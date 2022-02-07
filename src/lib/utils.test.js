@@ -13,6 +13,7 @@ import {
 
 const testEvent = {
   description: 'Description of event. Going to have a lot of fun doing things that we scheduled ahead of time.',
+  altdescription: '<div>Description of event with HTML</div>',
   duration: '0200',
   endDatetime: '20150126T020000+00:00',
   location: 'NYC',

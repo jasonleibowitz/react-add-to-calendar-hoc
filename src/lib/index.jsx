@@ -13,6 +13,7 @@ export default function AddToCalendar(WrappedButton, WrappedDropdown) {
       dropdownProps: PropTypes.shape(),
       event: PropTypes.shape({
         description: PropTypes.string,
+        altdescription : PropTypes.string,
         duration: PropTypes.oneOfType([
           PropTypes.number,
           PropTypes.string,

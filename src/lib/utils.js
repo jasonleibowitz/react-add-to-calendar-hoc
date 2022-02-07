@@ -88,6 +88,7 @@ const yahooShareUrl = ({
  */
 const buildShareFile = ({
   description = '',
+  altdescription = '',
   ctz = '',
   endDatetime,
   location = '',
@@ -108,7 +109,7 @@ const buildShareFile = ({
     timezone === '' ? `DTEND:${endDatetime}` : `DTEND;TZID=${timezone}:${endDatetime}`,
     `SUMMARY:${title}`,
     `DESCRIPTION:${escapeICSDescription(description)}`,
-    `X-ALT-DESC;FMTTYPE=text/html:${escapeICSDescription(description)}`,
+    `X-ALT-DESC;FMTTYPE=text/html:${escapeICSDescription(altdescription)}`,
     `LOCATION:${location}`,
     reminder === '' ? 'END:VEVENT' : `BEGIN:VALARM\nTRIGGER:-PT${reminder}\nACTION:DISPLAY\nEND:VALARM\nEND:VEVENT`,
     'END:VCALENDAR',
@@ -131,6 +132,7 @@ const buildShareFile = ({
  */
 export const buildShareUrl = ({
     description = '',
+    altdescription = '',
     duration,
     endDatetime,
     location = '',
@@ -145,6 +147,7 @@ export const buildShareUrl = ({
 
   const data = {
     description: encodeURI ? encodeURIComponent(description) : description,
+    altdescription: encodeURI ? encodeURIComponent(altdescription) : altdescription,
     duration: formatDuration(duration),
     endDatetime: formatDate(endDatetime),
     location: encodeURI ? encodeURIComponent(location) : location,
