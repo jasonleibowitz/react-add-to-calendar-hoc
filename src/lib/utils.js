@@ -46,6 +46,7 @@ export const escapeICSDescription = description => description.replace(/(\r?\n|<
  */
 const googleShareUrl = ({
     description,
+    altdescription,
     endDatetime,
     location,
     startDatetime,
@@ -54,7 +55,7 @@ const googleShareUrl = ({
   }) =>
   `https://calendar.google.com/calendar/render?action=TEMPLATE&dates=${
     startDatetime
-  }/${endDatetime}${timezone && `&ctz=${timezone}`}&location=${location}&text=${title}&details=${description}`;
+  }/${endDatetime}${timezone && `&ctz=${timezone}`}&location=${location}&text=${title}&details=${altdescription}`;
 
 /**
  * Takes an event object and returns a Yahoo Calendar Event URL
