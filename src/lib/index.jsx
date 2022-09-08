@@ -4,7 +4,7 @@ import { SHARE_SITES } from './enums';
 import { buildShareUrl, isInternetExplorer } from './utils';
 
 export { SHARE_SITES };
-export default function AddToCalendar(WrappedButton, WrappedDropdown) {
+export default function AddToCalendar(WrappedButton, WrappedDropdown, shareSites = SHARE_SITES) {
   return class AddToCalendarWrapped extends Component {
     static propTypes = {
       buttonProps: PropTypes.shape(),
@@ -25,7 +25,7 @@ export default function AddToCalendar(WrappedButton, WrappedDropdown) {
       filename: PropTypes.string,
       items: PropTypes.arrayOf(
         PropTypes.oneOf(
-          Object.keys(SHARE_SITES).map(itm => SHARE_SITES[itm])
+          Object.keys(shareSites).map(itm => shareSites[itm])
         )
       ),
       linkProps: PropTypes.shape(),
@@ -37,7 +37,7 @@ export default function AddToCalendar(WrappedButton, WrappedDropdown) {
       className: null,
       dropdownProps: {},
       filename: 'download',
-      items: Object.keys(SHARE_SITES).map(itm => SHARE_SITES[itm]),
+      items: Object.keys(shareSites).map(itm => shareSites[itm]),
       linkProps: {},
     };
 
@@ -94,7 +94,7 @@ export default function AddToCalendar(WrappedButton, WrappedDropdown) {
                     {...linkProps}
                     key={item}
                     onClick={this.handleCalendarButtonClick}
-                    href={buildShareUrl(event, item)}
+                    href={buildShareUrl(event, item, shareSites)}
                   >
                     {item}
                   </a>
