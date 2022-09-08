@@ -99,6 +99,16 @@ const luxonEvent = {
 
 const AddToCalendarDropdown = AddToCalendarHOC(Button, Dropdown);
 const AddToCalendarModal = AddToCalendarHOC(Button, CalendarModal);
+const AddToCalendarModalCustomLinkLabeled = AddToCalendarHOC(
+  Button, 
+  CalendarModal,
+  {
+    GOOGLE: 'Googleish',
+    ICAL: 'Apple Cal',
+    OUTLOOK: 'Outlook Cal',
+    YAHOO: 'Yahoo',
+  }
+);
 const isiOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
 
 function Demo() {
@@ -360,6 +370,34 @@ function Demo() {
   />
       `}
       </CodeSnippet>
+
+
+    
+      <h2 className={subTitleStyles}>Link with customized text</h2>
+      <p className={paragraphStyles}>Use the same SHARE_SITES json structure but with custom labels. Useful for internationalization</p>
+      <AddToCalendarModalCustomLinkLabeled
+        className={componentStyles}
+        linkProps={{
+          className: linkStyles,
+        }}
+        event={luxonEvent}
+      />
+
+      <CodeSnippet>
+        {`
+    const AddToCalendarModalCustomLinkLabeled = AddToCalendarHOC(
+      Button, 
+      CalendarModal,
+      {
+        GOOGLE: 'Googleish',
+        ICAL: 'Apple Cal',
+        OUTLOOK: 'Outlook Cal',
+        YAHOO: 'Yahoo',
+      }
+    );
+      `}
+      </CodeSnippet>
+
     </div>
   );
 }

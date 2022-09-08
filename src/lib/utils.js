@@ -135,8 +135,9 @@ export const buildShareUrl = ({
     title = ''
   },
   type,
+  shareSites = SHARE_SITES
 ) => {
-  const encodeURI = type !== SHARE_SITES.ICAL && type !== SHARE_SITES.OUTLOOK;
+  const encodeURI = type !== shareSites.ICAL && type !== shareSites.OUTLOOK;
 
   const data = {
     description: encodeURI ? encodeURIComponent(description) : description,
@@ -149,9 +150,9 @@ export const buildShareUrl = ({
   };
 
   switch (type) {
-    case SHARE_SITES.GOOGLE:
+    case shareSites.GOOGLE:
       return googleShareUrl(data);
-    case SHARE_SITES.YAHOO:
+    case shareSites.YAHOO:
       return yahooShareUrl(data);
     default:
       return buildShareFile(data);
