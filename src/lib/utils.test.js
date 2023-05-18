@@ -20,11 +20,26 @@ const testEvent = {
   title: 'Super Fun Event',
 }
 
+const testEventWithTimezone = {
+  ...testEvent,
+  timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+}
+
+const testEventWithVTIMEZONE = {
+  ...testEventWithTimezone,
+  vtimezone: 'BEGIN:VTIMEZONE\nTZID:Europe/Dublin\nX-LIC-LOCATION:Europe/Dublin\nLAST-MODIFIED:20230517T170335Z\nBEGIN:STANDARD\nTZNAME:IST\nTZOFFSETFROM:+0000\nTZOFFSETTO:+0100\nDTSTART:19700329T010000\nRRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU\nEND:STANDARD\nBEGIN:DAYLIGHT\nTZNAME:GMT\nTZOFFSETFROM:+0100\nTZOFFSETTO:+0000\nDTSTART:19701025T020000\nRRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU\nEND:DAYLIGHT\nEND:VTIMEZONE\n'
+}
+
 const expectedOutputs = {
   google: 'https://calendar.google.com/calendar/render?action=TEMPLATE&dates=20150126T000000Z/20150126T020000Z&location=NYC&text=Super%20Fun%20Event&details=Description%20of%20event.%20Going%20to%20have%20a%20lot%20of%20fun%20doing%20things%20that%20we%20scheduled%20ahead%20of%20time.',
+  googleWithTimezone: 'https://calendar.google.com/calendar/render?action=TEMPLATE&dates=20150126T000000Z/20150126T020000Z&ctz=America/Vancouver&location=NYC&text=Super%20Fun%20Event&details=Description%20of%20event.%20Going%20to%20have%20a%20lot%20of%20fun%20doing%20things%20that%20we%20scheduled%20ahead%20of%20time.',
   yahoo: 'https://calendar.yahoo.com/?v=60&view=d&type=20&title=Super%20Fun%20Event&st=20150126T000000Z&dur=0200&desc=Description%20of%20event.%20Going%20to%20have%20a%20lot%20of%20fun%20doing%20things%20that%20we%20scheduled%20ahead%20of%20time.&in_loc=NYC',
   ics: 'BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nURL:http://localhost/\nMETHOD:PUBLISH\nDTSTART:20150126T000000Z\nDTEND:20150126T020000Z\nSUMMARY:Super Fun Event\nDESCRIPTION:Description of event. Going to have a lot of fun doing things that we scheduled ahead of time.\nLOCATION:NYC\nEND:VEVENT\nEND:VCALENDAR',
+  icsWithTimezone: 'BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nURL:http://localhost/\nMETHOD:PUBLISH\nDTSTART;TZID=America/Vancouver:20150126T000000Z\nDTEND;TZID=America/Vancouver:20150126T020000Z\nSUMMARY:Super Fun Event\nDESCRIPTION:Description of event. Going to have a lot of fun doing things that we scheduled ahead of time.\nLOCATION:NYC\nEND:VEVENT\nEND:VCALENDAR',
+  icsWithVTIMEZONE: 'BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VTIMEZONE\nTZID:Europe/Dublin\nX-LIC-LOCATION:Europe/Dublin\nLAST-MODIFIED:20230517T170335Z\nBEGIN:STANDARD\nTZNAME:IST\nTZOFFSETFROM:+0000\nTZOFFSETTO:+0100\nDTSTART:19700329T010000\nRRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU\nEND:STANDARD\nBEGIN:DAYLIGHT\nTZNAME:GMT\nTZOFFSETFROM:+0100\nTZOFFSETTO:+0000\nDTSTART:19701025T020000\nRRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU\nEND:DAYLIGHT\nEND:VTIMEZONE\nBEGIN:VEVENT\nURL:http://localhost/\nMETHOD:PUBLISH\nDTSTART;TZID=America/Vancouver:20150126T000000Z\nDTEND;TZID=America/Vancouver:20150126T020000Z\nSUMMARY:Super Fun Event\nDESCRIPTION:Description of event. Going to have a lot of fun doing things that we scheduled ahead of time.\nLOCATION:NYC\nEND:VEVENT\nEND:VCALENDAR',
   icsMobile: 'data:text/calendar;charset=utf8,BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nURL:http://localhost/\nMETHOD:PUBLISH\nDTSTART:20150126T000000Z\nDTEND:20150126T020000Z\nSUMMARY:Super Fun Event\nDESCRIPTION:Description of event. Going to have a lot of fun doing things that we scheduled ahead of time.\nLOCATION:NYC\nEND:VEVENT\nEND:VCALENDAR',
+  icsMobileWithTimezone: 'data:text/calendar;charset=utf8,BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nURL:http://localhost/\nMETHOD:PUBLISH\nDTSTART;TZID=America/Vancouver:20150126T000000Z\nDTEND;TZID=America/Vancouver:20150126T020000Z\nSUMMARY:Super Fun Event\nDESCRIPTION:Description of event. Going to have a lot of fun doing things that we scheduled ahead of time.\nLOCATION:NYC\nEND:VEVENT\nEND:VCALENDAR',
+  icsMobileWithVTIMEZONE: 'data:text/calendar;charset=utf8,BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VTIMEZONE\nTZID:Europe/Dublin\nX-LIC-LOCATION:Europe/Dublin\nLAST-MODIFIED:20230517T170335Z\nBEGIN:STANDARD\nTZNAME:IST\nTZOFFSETFROM:+0000\nTZOFFSETTO:+0100\nDTSTART:19700329T010000\nRRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU\nEND:STANDARD\nBEGIN:DAYLIGHT\nTZNAME:GMT\nTZOFFSETFROM:+0100\nTZOFFSETTO:+0000\nDTSTART:19701025T020000\nRRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU\nEND:DAYLIGHT\nEND:VTIMEZONE\nBEGIN:VEVENT\nURL:http://localhost/\nMETHOD:PUBLISH\nDTSTART;TZID=America/Vancouver:20150126T000000Z\nDTEND;TZID=America/Vancouver:20150126T020000Z\nSUMMARY:Super Fun Event\nDESCRIPTION:Description of event. Going to have a lot of fun doing things that we scheduled ahead of time.\nLOCATION:NYC\nEND:VEVENT\nEND:VCALENDAR',
 }
 
 describe('formatDate', () => {
@@ -53,6 +68,16 @@ describe('buildShareUrl', () => {
       const result = buildShareUrl(testEvent, SHARE_SITES.GOOGLE);
       expect(result).toEqual(expectedOutputs.google);
     });
+
+    it('Google share URL includes timezone', () => {
+      const result = buildShareUrl(testEventWithTimezone, SHARE_SITES.GOOGLE);
+      expect(result).toEqual(expectedOutputs.googleWithTimezone);
+    });
+
+    it('Google share URL ignores VTIMEZONE', () => {
+      const result = buildShareUrl(testEventWithVTIMEZONE, SHARE_SITES.GOOGLE);
+      expect(result).toEqual(expectedOutputs.googleWithTimezone);
+    });
   });
 
   describe('Yahoo', () => {
@@ -68,6 +93,16 @@ describe('buildShareUrl', () => {
       }, SHARE_SITES.YAHOO);
       expect(result).toEqual(expectedOutputs.yahoo);
     });
+
+    it('Yahoo share URL ignores timezone', () => {
+      const result = buildShareUrl(testEventWithTimezone, SHARE_SITES.YAHOO);
+      expect(result).toEqual(expectedOutputs.yahoo);
+    });
+
+    it('Yahoo share URL ignores VTIMEZONE', () => {
+      const result = buildShareUrl(testEventWithVTIMEZONE, SHARE_SITES.YAHOO);
+      expect(result).toEqual(expectedOutputs.yahoo);
+    });
   });
 
 
@@ -77,6 +112,16 @@ describe('buildShareUrl', () => {
       expect(result).toEqual(expectedOutputs.ics);
     });
 
+    it('returns a proper iCal content object with timezone', () => {
+      const result = buildShareUrl(testEventWithTimezone, SHARE_SITES.ICAL);
+      expect(result).toEqual(expectedOutputs.icsWithTimezone);
+    });
+
+    it('returns a proper iCal content object with VTIMEZONE', () => {
+      const result = buildShareUrl(testEventWithVTIMEZONE, SHARE_SITES.ICAL);
+      expect(result).toEqual(expectedOutputs.icsWithVTIMEZONE);
+    });
+
     it('prepends a data URL when userAgent is mobile', () => {
       navigator.__defineGetter__('userAgent', function () {
         return "Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1";
@@ -84,6 +129,24 @@ describe('buildShareUrl', () => {
 
       const result = buildShareUrl(testEvent, SHARE_SITES.ICAL);
       expect(result).toEqual(encodeURI(expectedOutputs.icsMobile));
+    });
+
+    it('prepends a data URL when userAgent is mobile with timezone', () => {
+      navigator.__defineGetter__('userAgent', function () {
+        return "Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1";
+      });
+
+      const result = buildShareUrl(testEventWithTimezone, SHARE_SITES.ICAL);
+      expect(result).toEqual(encodeURI(expectedOutputs.icsMobileWithTimezone));
+    });
+
+    it('prepends a data URL when userAgent is mobile with VTIMEZONE', () => {
+      navigator.__defineGetter__('userAgent', function () {
+        return "Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1";
+      });
+
+      const result = buildShareUrl(testEventWithVTIMEZONE, SHARE_SITES.ICAL);
+      expect(result).toEqual(encodeURI(expectedOutputs.icsMobileWithVTIMEZONE));
     });
   });
 });
