@@ -92,11 +92,15 @@ const buildShareFile = ({
   location = '',
   startDatetime,
   timezone = '',
+  vtimezone = '',
   title = '',
 }) => {
+  const vtimezoneTrimmed = vtimezone && vtimezone.replace(/^\s+/, '').replace(/\s+$/, '')
+
   let content = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
+    ...(vtimezoneTrimmed ? [vtimezoneTrimmed] : []),
     'BEGIN:VEVENT',
     `URL:${document.URL}`,
     'METHOD:PUBLISH',
@@ -132,6 +136,7 @@ export const buildShareUrl = ({
     location = '',
     startDatetime,
     timezone = '',
+    vtimezone = '',
     title = ''
   },
   type,
@@ -145,6 +150,7 @@ export const buildShareUrl = ({
     location: encodeURI ? encodeURIComponent(location) : location,
     startDatetime: formatDate(startDatetime),
     timezone,
+    vtimezone,
     title: encodeURI ? encodeURIComponent(title) : title,
   };
 
