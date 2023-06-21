@@ -50,18 +50,7 @@ export default function AddToCalendar(WrappedButton, WrappedDropdown) {
       e.preventDefault();
       const url = e.currentTarget.getAttribute('href');
       if (url.startsWith('BEGIN')) {
-        const blob = new Blob([url], { type: 'text/calendar;charset=utf-8' });
-
-        if (isInternetExplorer()) {
-          window.navigator.msSaveOrOpenBlob(blob, `${filename}.ics`);
-        } else {
-          const link = document.createElement('a');
-          link.href = window.URL.createObjectURL(blob);
-          link.setAttribute('download', `${filename}.ics`);
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-        }
+        window.open('data:text/calendar;charset=utf8,' + url)
       } else {
         window.open(url, '_blank');
       }
