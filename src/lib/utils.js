@@ -46,6 +46,7 @@ export const escapeICSDescription = description => description.replace(/(\r?\n|<
  */
 const googleShareUrl = ({
     description,
+    altdescription,
     endDatetime,
     location,
     startDatetime,
@@ -54,7 +55,7 @@ const googleShareUrl = ({
   }) =>
   `https://calendar.google.com/calendar/render?action=TEMPLATE&dates=${
     startDatetime
-  }/${endDatetime}${timezone && `&ctz=${timezone}`}&location=${location}&text=${title}&details=${description}`;
+  }/${endDatetime}${timezone && `&ctz=${timezone}`}&location=${location}&text=${title}&details=${altdescription}`;
 
 /**
  * Takes an event object and returns a Yahoo Calendar Event URL
@@ -83,16 +84,19 @@ const yahooShareUrl = ({
  * @param {string} event.location
  * @param {string} event.startDatetime
  * @param {string} event.title
+ * @param {string} event.reminder
  * @returns {array} ICS Content
  */
 const buildShareFile = ({
   description = '',
+  altdescription = '',
   ctz = '',
   endDatetime,
   location = '',
   startDatetime,
   timezone = '',
   title = '',
+  reminder = ''
 }) => {
   let content = [
     'BEGIN:VCALENDAR',
@@ -106,8 +110,9 @@ const buildShareFile = ({
     timezone === '' ? `DTEND:${endDatetime}` : `DTEND;TZID=${timezone}:${endDatetime}`,
     `SUMMARY:${title}`,
     `DESCRIPTION:${escapeICSDescription(description)}`,
+    `X-ALT-DESC;FMTTYPE=text/html:${escapeICSDescription(altdescription)}`,
     `LOCATION:${location}`,
-    'END:VEVENT',
+    reminder === '' ? 'END:VEVENT' : `BEGIN:VALARM\nTRIGGER:-PT${reminder}\nACTION:DISPLAY\nEND:VALARM\nEND:VEVENT`,
     'END:VCALENDAR',
   ].join('\n');
 
@@ -123,16 +128,19 @@ const buildShareFile = ({
  * @param {string} event.location
  * @param {string} event.startDatetime
  * @param {string} event.title
+ * @param {string} event.reminder
  * @param {enum} type One of SHARE_SITES from ./enums
  */
 export const buildShareUrl = ({
     description = '',
+    altdescription = '',
     duration,
     endDatetime,
     location = '',
     startDatetime,
     timezone = '',
-    title = ''
+    title = '',
+    reminder = ''
   },
   type,
 ) => {
@@ -140,12 +148,14 @@ export const buildShareUrl = ({
 
   const data = {
     description: encodeURI ? encodeURIComponent(description) : description,
+    altdescription: encodeURI ? encodeURIComponent(altdescription) : altdescription,
     duration: formatDuration(duration),
     endDatetime: formatDate(endDatetime),
     location: encodeURI ? encodeURIComponent(location) : location,
     startDatetime: formatDate(startDatetime),
     timezone,
     title: encodeURI ? encodeURIComponent(title) : title,
+    reminder,
   };
 
   switch (type) {
